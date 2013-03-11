@@ -32,7 +32,7 @@
 // A simple approach
 // -(void)setSuit:(NSString *)suit
 // {
-//     if([@[@"?", @"?", @"?", @"?"] containsObject:suit])
+//     if([@[@"♣", @"♦", @"♥", @"♠"] containsObject:suit])
 //     {
 //         _suit = suit;
 //     }
@@ -40,7 +40,7 @@
 
 + (NSArray *)validSuits
 {
-    return @[@"?", @"?", @"?", @"?"];
+    return @[@"♣", @"♦", @"♥", @"♠"];
 }
 
 -(void)setSuit:(NSString *)suit

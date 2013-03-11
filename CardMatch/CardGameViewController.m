@@ -9,11 +9,9 @@
 #import "CardGameViewController.h"
 
 @interface CardGameViewController ()
-
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
-
 @property (nonatomic) int flipCount;
-
+//// add a deck property
 @end
 
 @implementation CardGameViewController
@@ -21,6 +19,8 @@
 - (void)setFlipCount:(int)flipCount
 {
     _flipCount = flipCount;
+    //// this needs to be a new random card each click
+    //// leverage -- UIButton - setTitle:forState
     self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];
 }
 
@@ -33,7 +33,7 @@
 //        {
 //            sender.selected = YES;
 //        }
-//        <#statements#>
+//        
 //    }
     
     sender.selected = !sender.isSelected;
