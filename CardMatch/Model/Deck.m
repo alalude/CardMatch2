@@ -15,6 +15,7 @@
 #import "Deck.h"
 
 @interface Deck()
+// An array to store the Cards "a deck"
 @property (strong, nonatomic) NSMutableArray *cards;
 @end
 

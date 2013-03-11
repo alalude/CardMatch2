@@ -16,6 +16,7 @@
 
 @implementation PlayingCard
 
+// Grabs the suit and number of a card
 - (NSString *)contents
 {
     // 11 of hearts not the jack of hearts :-(
@@ -27,6 +28,7 @@
     return [rankString[self.rank] stringByAppendingString:self.suit];
 }
 
+// Only necessary because both setter and getter manually created
 @synthesize suit = _suit;
 
 // A simple approach
@@ -38,11 +40,13 @@
 //     }
 // }
 
+// Method does work directly on class not eligible to use @property
 + (NSArray *)validSuits
 {
     return @[@"♣", @"♦", @"♥", @"♠"];
 }
 
+// The "setter" for suit
 -(void)setSuit:(NSString *)suit
 {
     // Example of calling a class method
