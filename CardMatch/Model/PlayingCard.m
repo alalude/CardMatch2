@@ -70,7 +70,11 @@
 
 + (NSUInteger)maxRank
 {
-    return [self rankStrings].count-1;
+    // Dot notation will work, but count is not a property
+    // Properties are to do little if any calculations
+    //return [self rankStrings].count -1;
+    
+    return [[self rankStrings] count] -1;
 }
 
 - (void)setRank:(NSUInteger)rank
