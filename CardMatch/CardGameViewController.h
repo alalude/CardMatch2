@@ -7,7 +7,7 @@
 //
 
 //
-// SingleCard
+// Master
 //
 
 #import <UIKit/UIKit.h>
