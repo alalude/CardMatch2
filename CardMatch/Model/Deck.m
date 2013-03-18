@@ -34,12 +34,12 @@
     {
         [self.cards insertObject:card atIndex:0];
     }
-        
+    
     else
     {
         [self.cards addObject:card];
     }
-
+    
 }
 
 - (Card *)drawRandomCard

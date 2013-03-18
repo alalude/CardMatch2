@@ -31,7 +31,7 @@
     
     for (Card *card in otherCards) //Loop to match an array
     {
-    
+        
         if ([card.contents isEqualToString:self.contents])
             //Code to judge match quality of a card
         {
@@ -45,3 +45,4 @@
 
 
 @end
+

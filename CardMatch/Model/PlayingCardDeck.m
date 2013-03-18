@@ -36,13 +36,19 @@
                 // calling the setters
                 card.rank = rank;
                 card.suit = suit;
+                
+                //
+                //*!* this next line added based on online notes
+                //    (a huge change)
+                //
+                [self addCard:card atTop:YES];
             }
         }
-    
+        
     }
     
     return self;
-
+    
 }
 
 @end
