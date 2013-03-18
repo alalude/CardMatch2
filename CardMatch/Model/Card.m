@@ -17,8 +17,8 @@
 
 // Adesina Code
 
-@interface Card()
-@end
+//@interface Card()
+//@end
 
 // --
 

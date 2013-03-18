@@ -8,77 +8,137 @@
 
 #import "CardGameViewController.h"
 #import "PlayingCardDeck.h"
+#import "CardMatchingGame.h"
 
 @interface CardGameViewController ()
-
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
-
 @property (nonatomic) int flipCount;
 
-// Fetch the card to work with
-// Should it be weak?
-@property (strong, nonatomic) IBOutlet UIButton *cardButton;
-//*!* I'd like to have a playing card deck
+// An array of the cards on screen
+@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 
-// My original and flawed idea
-// TRY 1: @property (strong, nonatomic) NSMutableArray *myDeck; *!*
-// TRY 2: @property PlayingCardDeck *deck; *!*
+// @property (strong, nonatomic) Deck *deck; //rendered obsolete by connection to model
 
-@property (strong, nonatomic) Deck *deck; // Does not have to be PlayingCardDeck
+// Bringing in the game itself
+// Essentially a pointer to the model
+@property (strong, nonatomic) CardMatchingGame *game;
+
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
 @end
 
 
-
-//*!* create a deck of cards
-//    PlayingCard *card = [[PlayingCard alloc] init];
-//    PlayingCardDeck *deck = [[PlayingCardDeck alloc] init];
-
-//*!* Use "PlayingCardDeck" to create an array/deck of cards
-
-//*!* drawRandomCard
-
-
-
 @implementation CardGameViewController
 
-//*!* Hopefully building a deck
-// - (void)buildDeck
-// {
-//        PlayingCardDeck *deck = [[PlayingCardDeck alloc] init];
-// }
+/* rendered obsolete by connection to model
+ - (Deck *)deck
+ {
+ if (!_deck) _deck = [[PlayingCardDeck alloc] init];
+ return _deck;
+ }
+ */
 
-// The proper way to build/init an object
-- (Deck *)deck
+// Lazy instantiation for the model
+// - (CardMatchingGame *)game:(NSUInteger)count:(Deck *)deck // I was wrong
+- (CardMatchingGame *)game
 {
-    if (!_deck)
-    {
-        _deck = [[PlayingCardDeck alloc] init]; // of type Deck but inited as PlayingCardDeck
+    // if (!_game) _game = [[CardMatchingGame alloc] init]; // I was wrong again
+    // Don't cut/paste write by hand and let Xcode help you
+    // if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:count usingDeck:deck];
+    // Not quite there yet
+    /* This works, but it's better/simpler to not init deck by itself
+     if (!_game) {
+     _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+     usingDeck:self.deck];
+     }
+     */
+    // grabbed alloc/init from Deck init and dropped it in
+    if (!_game) {
+        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
+                                                  usingDeck:[[PlayingCardDeck alloc] init]];
     }
-    return _deck;
+    return _game;
 }
 
-- (void) setCardButton:(UIButton *)cardButton;
+- (void)setCardButtons:(NSArray *)cardButtons
 {
-    // *** this needs to be a new random card each click
-    // *** leverage -- UIButton - setTitle:forState
-    // *** xxx
+    _cardButtons = cardButtons;
+    // Still need a means by witch to update the UI
+    // We must have the UI match the model at all times
+    [self updateUI];
     
-    // Before I did anything I should have decided to make a setter
-    // This first line of any setter
-    _cardButton = cardButton;
     
-    // Setting the cards value
-    // TRY 1: setTitle:sender.selected = drawRandomCard[self.deck]; *!*
-    
-    // First get the random card
-    Card *card = [self.deck drawRandomCard];
-    NSLog(@"Card Contents %@", card.contents);
-    // Then display it
-    // TRY 1: [setTitle:card.content];
-    [cardButton setTitle:card.contents forState:UIControlStateSelected];
+    /* Model now controls how cards are set
+     
+     int i = 1; //*!* just for testing
+     
+     //
+     // added "self." to for loop parameters
+     // for (UIButton *cardButtons in cardButtons)
+     //
+     
+     for (UIButton *cardButtons in self.cardButtons)
+     {
+     Card *card = [self.deck drawRandomCard];
+     [cardButtons setTitle:card.contents forState:UIControlStateSelected];
+     NSLog(@"Card Contents - %d %@", i, card.contents); //*!* just for testing
+     i++; //*!* just for testing
+     }
+     */
 }
 
+// The method to update the UI
+// Objective 1: Make the UI look like the model
+// Objective 2: Inform the model of changes to the UI
+- (void)updateUI
+{
+    
+    // Go through all your buttons and update all your cards
+    // for (CardButtons *cardButtons in self.cardButtons) // Gotta get the type right
+    // for (UIButton *cardButtons in self.cardButtons) // NOT *cardButtons
+    for (UIButton *cardButton in self.cardButtons)
+    {
+        // Think - from PlayingCardGame
+        // - (Card *)cardAtIndex:(NSUInteger)index;
+        // Think - from this class's method flipCard
+        // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
+        
+        // A good start
+        // [self.game cardAtIndex:[self.cardButtons indexOfObject:i]];
+        
+        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
+        
+        // Setting all of the card's features
+        
+        // Set card value
+        [cardButton setTitle:card.contents forState:UIControlStateSelected]; //Nailed on first try
+        // Not so fast
+        // Documentation says I need to set title for every state or it reverts to the default
+        // in this case the back of the card
+        // So, I've got to add...
+        [cardButton setTitle:card.contents forState:UIControlStateSelected | UIControlStateDisabled];
+        
+        // Make sure correct state is selected
+        // cardButton.selected = card.faceUp; // Close, but not quite
+        cardButton.selected = card.isFaceUp;
+        
+        // Make sure the enbled state is correct
+        // cardButton.enabled = card.isUnplayable;// Close, but not quite
+        // Negate rightside of equation
+        cardButton.enabled = !card.isUnplayable;
+        
+        // Ghost cards if matched to 30%
+        cardButton.alpha = (card.isUnplayable ? 0.3 : 1.0);
+    }
+    
+    // Update score on UI
+    // self.scoreLabel = [card match:@[otherCard]]; // not quite
+    
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    
+}
+
+// Purely UI features can update themselves directly in their own setter
 - (void)setFlipCount:(int)flipCount
 {
     _flipCount = flipCount;
@@ -86,25 +146,23 @@
     NSLog(@"flips updated to %d", self.flipCount);
 }
 
-
+// Show the Score
+/* This is the worng way to do this
+ - (void)setScoreLabel:(UILabel *)scoreLabel
+ {}
+ */
 
 - (IBAction)flipCard:(UIButton *)sender
 {
-//    if (sender.isSelected)
-//    {
-//        sender.selected = NO;
-//        else
-//        {
-//            sender.selected = YES;
-//        }
-//        
-//    }
-    
-    sender.selected = !sender.isSelected;
-    
-//    self.flipCount = self.flipCount + 1;
-    
+    // sender.selected = !sender.isSelected; //rendered obsolete by connection to model
+    // We now need to let the model know a card needs to be flipped
+    // self.cardButtons.isFaceUp; // No way this will work
+    // You have to go through the game
+    // [self.game flipCardAtIndex:self.card.index] // Not quite there
+    [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
     self.flipCount++;
+    // Each time a card is flipped the UI needs to be updated
+    [self updateUI];
 }
 
 @end

@@ -30,6 +30,8 @@
 
 - (void)addCard:(Card *)card atTop:(BOOL)atTop
 {
+    if (!card) return;
+    
     if (atTop)
     {
         [self.cards insertObject:card atIndex:0];

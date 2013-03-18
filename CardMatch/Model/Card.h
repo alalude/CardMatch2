@@ -18,8 +18,8 @@
 
 @property (strong, nonatomic) NSString *contents;
 
-@property (nonatomic, getter=isFaceUp) BOOL faceUp;
-@property (nonatomic, getter=isUnplayable) BOOL unplayable;
+@property (nonatomic, getter = isFaceUp) BOOL faceUp;
+@property (nonatomic, getter = isUnplayable) BOOL unplayable;
 
 // - (int)match:(Card *)card;
 - (int)match:(NSArray *)otherCards;
