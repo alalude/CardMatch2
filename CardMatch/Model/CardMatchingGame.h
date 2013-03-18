@@ -19,10 +19,6 @@
 @interface CardMatchingGame : NSObject
 
 // DESIGNATED INITIALIZER
-// Method to initialize the game
-// It is more complex than initializers for simpler objects
-// It cannot be initialized until it is known how many cards are expected and from which deck
-// It takes an arguement for card count and a deck
 - (id)initWithCardCount:(NSUInteger)count
               usingDeck:(Deck *)deck;
 

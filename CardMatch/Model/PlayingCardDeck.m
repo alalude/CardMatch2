@@ -20,7 +20,6 @@
 
 @implementation PlayingCardDeck
 
-// id = pointer to an unknown class
 - (id)init
 {
     // This line is a very rare case
@@ -37,10 +36,6 @@
                 card.rank = rank;
                 card.suit = suit;
                 
-                //
-                //*!* this next line added based on online notes
-                //    (a huge change)
-                //
                 [self addCard:card atTop:YES];
             }
         }

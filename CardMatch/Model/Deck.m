@@ -51,10 +51,6 @@
     
     if(self.cards.count)
     {
-        // Dot notation will work, but count is not a property
-        // Properties are to do little if any calculations
-        // unsigned index = arc4random() % self.cards.count;
-        
         unsigned index = arc4random() % [self.cards count];
         
         randomCard = self.cards[index];

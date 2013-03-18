@@ -16,12 +16,7 @@
 
 @implementation PlayingCard
 
-/*
- Without this PlayingCardGame would be using the match function in Card via inheretance
- Card's match function only recognizes matches where both suit and rank are identical
- So it's necessary to create a more robust method that here that will overide Card's
- matching method and deliver PlayingCardGame the functionality it requires
- */
+// Overrides match function in Card
 - (int)match:(NSArray *)otherCards
 {
     int score = 0;
@@ -29,16 +24,8 @@
     // For now matching against a single card
     if ([otherCards count] == 1) // *!* Changed from 0 to 1
     {
-        // Getting the card out of its array
-        // One option is -->
-        // PlayingCard *otherCard = [otherCards objectAtIndex:0];
         
-        // But this never gives you an array index out of bounds
         PlayingCard *otherCard = [otherCards lastObject];
-        
-        // Testing Suite
-        // NSLog(@"Card Contents - %@", self.contents);
-        // NSLog(@"Other Card's Contents - %@", otherCard.contents);
         
         // Points for matching suit
         if([otherCard.suit isEqualToString:self.suit])
@@ -59,11 +46,6 @@
 // Grabs the suit and number of a card
 - (NSString *)contents
 {
-    // 11 of hearts not the jack of hearts :-(
-    // return [NSString stringWithFormat:@"%d%@", self.rank, self.suit];
-    // Generic means
-    // NSArray *rankString = @[@"?", @"A", @"2", @"3", ..., @"10", @"J", @"Q", @"K"];
-    
     NSArray *rankString = [PlayingCard rankStrings];
     return [rankString[self.rank] stringByAppendingString:self.suit];
 }
@@ -71,21 +53,9 @@
 // Only necessary because both setter and getter manually created
 @synthesize suit = _suit;
 
-// A simple approach
-// -(void)setSuit:(NSString *)suit
-// {
-//     if([@[@"♣", @"♦", @"♥", @"♠"] containsObject:suit])
-//     {
-//         _suit = suit;
-//     }
-// }
-
-
 // The "setter" for suit
 -(void)setSuit:(NSString *)suit
 {
-    // Example of calling a class method
-    // Not "[" pointer to an instance of a class
     if([[PlayingCard validSuits] containsObject:suit])
     {
         _suit = suit;
@@ -118,10 +88,6 @@
 
 + (NSUInteger)maxRank
 {
-    // Dot notation will work, but count is not a property
-    // Properties are to do little if any calculations
-    //return [self rankStrings].count -1;
-    
     return [[self rankStrings] count] -1;
 }
 

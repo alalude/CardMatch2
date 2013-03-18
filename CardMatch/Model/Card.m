@@ -15,15 +15,7 @@
 
 #import "Card.h"
 
-// Adesina Code
-
-//@interface Card()
-//@end
-
-// --
-
 @implementation Card
-// @synthesize faceUp = _faceUp;
 
 - (int)match:(Card *)otherCards
 {
@@ -32,8 +24,7 @@
     for (Card *card in otherCards) //Loop to match an array
     {
         
-        if ([card.contents isEqualToString:self.contents])
-            //Code to judge match quality of a card
+        if ([card.contents isEqualToString:self.contents]) //Code to judge match quality of a card
         {
             score = 1;
         }

@@ -20,10 +20,6 @@
 @property (nonatomic) NSUInteger rank;
 
 + (NSArray *)validSuits;
-//
-//*!* rankStrings added based on online notes
-//    (no noticeable change at run time)
-//
 + (NSArray *)rankStrings;
 + (NSUInteger)maxRank;
 
