@@ -159,6 +159,7 @@
             }
         }
     }
+    self.score = 0; // initialize score to zero (for new games)
     return self;
 }
 

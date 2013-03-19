@@ -40,6 +40,17 @@
     return _game;
 }
 
+- (IBAction)dealCards:(UIButton *)sender
+{
+    // - (void)flipCardAtIndex:(NSUInteger)index
+    // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
+    // - (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
+    // deal new cards
+    CardMatchingGame *game = [self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
+    [self updateUI]; // get all cards face up
+    self.flipCount = 0; // reset flipCount
+}
+
 - (void)setCardButtons:(NSArray *)cardButtons
 {
     _cardButtons = cardButtons;
@@ -84,8 +95,6 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     
     // Update results on UI
-    // self.resultsLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-    // self.resultsLabel.text = [NSString stringWithFormat:@"Results: %@", self.game.results];
     self.resultsLabel.text = self.game.results;
     
     // self.resultsLabel.text = (@"Results");
@@ -107,5 +116,7 @@
     // Each time a card is flipped the UI needs to be updated
     [self updateUI];
 }
+
+
 
 @end
