@@ -37,27 +37,6 @@
 #define MISMATCH_PENALTY 2
 #define FLIP_COST 1
 
-
-/*
- Extract the results from the method below
- Then serve them up to be delivered in the UI
- 
- What we know:
- 1) Match Rank
- 2) Match Suit
- 3) Mismatch
- 4) Neutral FLip
- 
- // Testing Suite
- NSLog(@"Rank Matched, Score %d", self.score);
- NSLog(@"Card Contents - %@", card.contents);
- NSLog(@"Other Card's Contents - %@", otherCard.contents);
- 
- */
-
-
-
-
 - (void)flipCardAtIndex:(NSUInteger)index
 {
     // First get the card at the designated index
@@ -89,8 +68,6 @@
                         self.score += matchScore * MATCH_BONUS;
                         
                         // Results picked up for display
-                        // self.results = (@"Rank Matched");
-                        // self.results = [NSString stringWithFormat:@"Rank Matched: %d points", (matchScore * MATCH_BONUS)];
                         self.results = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card.contents, otherCard.contents, (matchScore * MATCH_BONUS)];
                         
                     }
@@ -102,8 +79,6 @@
                         self.score += matchScore * MATCH_BONUS;
                         
                         // Results picked up for display
-                        // self.results = (@"Suit Matched");
-                        // self.results = [NSString stringWithFormat:@"Suit Matched: %d points", (matchScore * MATCH_BONUS)];
                         self.results = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card.contents, otherCard.contents, (matchScore * MATCH_BONUS)];
 
                     }
@@ -114,9 +89,6 @@
                         self.score -= MISMATCH_PENALTY;
                         
                         // Results picked up for display
-                        // self.results = (@"Mismatch");
-                        // FORMATTING self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];                        
-                        // self.results = [NSString stringWithFormat:@"Mismatch: %d point penalty", MISMATCH_PENALTY];
                         self.results = [NSString stringWithFormat:@"%@ & %@ Don't match! %d point penalty", card.contents, otherCard.contents, MISMATCH_PENALTY];
                     }
                     // Breakout since we've found another face up card

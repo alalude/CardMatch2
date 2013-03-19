@@ -8,7 +8,7 @@
 
 #import "CardGameViewController.h"
 #import "PlayingCardDeck.h"
-#import "CardMatchingGame.h"
+#import "TriCardMatchingGame.h"
 
 @interface CardGameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
@@ -19,6 +19,8 @@
 
 // Bringing in the game itself, a pointer to the model
 @property (strong, nonatomic) CardMatchingGame *game;
+
+@property (strong, nonatomic) TriCardMatchingGame *triGame;
 
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
@@ -38,17 +40,6 @@
                                                   usingDeck:[[PlayingCardDeck alloc] init]];
     }
     return _game;
-}
-
-- (IBAction)dealCards:(UIButton *)sender
-{
-    // - (void)flipCardAtIndex:(NSUInteger)index
-    // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
-    // - (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
-    // deal new cards
-    CardMatchingGame *game = [self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
-    [self updateUI]; // get all cards face up
-    self.flipCount = 0; // reset flipCount
 }
 
 - (void)setCardButtons:(NSArray *)cardButtons
@@ -117,6 +108,40 @@
     [self updateUI];
 }
 
+- (IBAction)dealCards:(UIButton *)sender
+{
+    // - (void)flipCardAtIndex:(NSUInteger)index
+    // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
+    // - (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
+    // deal new cards
+    CardMatchingGame *game = [self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
+    [self updateUI]; // get all cards face up
+    
+    // MVC legit?
+    self.flipCount = 0; // reset flipCount
+    self.resultsLabel.text = (@"Results"); // reset resultsLabel
+}
 
+- (IBAction)chooseGame:(UISegmentedControl *)sender
+{
+    NSLog(@"Segment State %d", sender.selectedSegmentIndex);
+    
+    if(sender.selectedSegmentIndex)
+    {
+        TriCardMatchingGame *triGame = [self.triGame initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
+        [self updateUI]; // get all cards face up    
+        self.flipCount = 0; // reset flipCount
+        self.resultsLabel.text = (@"Results"); // reset resultsLabel
+        NSLog(@"Set to 3 Card Game");
+    }
+    else
+    {
+        CardMatchingGame *game = [self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
+        [self updateUI]; // get all cards face up
+        self.flipCount = 0; // reset flipCount
+        self.resultsLabel.text = (@"Results"); // reset resultsLabel
+        NSLog(@"Set to 2 Card Game");    
+    }
+}
 
 @end

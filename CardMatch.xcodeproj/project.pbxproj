@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E341C72116F8EDD700E3D660 /* TriCardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = E341C72016F8EDD700E3D660 /* TriCardMatchingGame.m */; };
 		E36F356116E0244100FB92F9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36F356016E0244100FB92F9 /* UIKit.framework */; };
 		E36F356316E0244100FB92F9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36F356216E0244100FB92F9 /* Foundation.framework */; };
 		E36F356516E0244100FB92F9 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E36F356416E0244100FB92F9 /* CoreGraphics.framework */; };
@@ -26,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E341C71F16F8EDD700E3D660 /* TriCardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TriCardMatchingGame.h; path = Model/TriCardMatchingGame.h; sourceTree = "<group>"; };
+		E341C72016F8EDD700E3D660 /* TriCardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TriCardMatchingGame.m; path = Model/TriCardMatchingGame.m; sourceTree = "<group>"; };
 		E36F355D16E0244100FB92F9 /* CardMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CardMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E36F356016E0244100FB92F9 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		E36F356216E0244100FB92F9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -136,6 +139,8 @@
 				E36F358E16E184AE00FB92F9 /* PlayingCardDeck.m */,
 				E38F3C1816F6E20B00C6B0E7 /* CardMatchingGame.h */,
 				E38F3C1916F6E20B00C6B0E7 /* CardMatchingGame.m */,
+				E341C71F16F8EDD700E3D660 /* TriCardMatchingGame.h */,
+				E341C72016F8EDD700E3D660 /* TriCardMatchingGame.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -215,6 +220,7 @@
 				E36F358C16E1831200FB92F9 /* PlayingCard.m in Sources */,
 				E36F358F16E184AE00FB92F9 /* PlayingCardDeck.m in Sources */,
 				E38F3C1A16F6E20B00C6B0E7 /* CardMatchingGame.m in Sources */,
+				E341C72116F8EDD700E3D660 /* TriCardMatchingGame.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
