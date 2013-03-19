@@ -31,4 +31,8 @@
 // readonly = only has a getter
 @property (readonly, nonatomic) int score;
 
+// Results for Display
+// readonly = only has a getter
+@property (readonly, nonatomic) NSString *results;
+
 @end

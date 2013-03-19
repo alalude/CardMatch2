@@ -22,6 +22,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
+@property (weak, nonatomic) IBOutlet UILabel *resultsLabel;
+
 @end
 
 
@@ -55,6 +57,7 @@
     // Go through all your buttons and update all your cards
     for (UIButton *cardButton in self.cardButtons)
     {
+        // Get a card from
         Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
         
         // Setting all of the card's features
@@ -78,7 +81,14 @@
     }
     
     // Update score on UI
-   self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    
+    // Update results on UI
+    // self.resultsLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    // self.resultsLabel.text = [NSString stringWithFormat:@"Results: %@", self.game.results];
+    self.resultsLabel.text = self.game.results;
+    
+    // self.resultsLabel.text = (@"Results");
     
 }
 
