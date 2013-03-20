@@ -211,7 +211,9 @@
         }
         // Now flip the card
         card.faceUp = !card.isFaceUp;
-    } */
+    }
+     
+     */
 }
 
 - (Card *)cardAtIndex:(NSUInteger)index
