@@ -19,6 +19,40 @@
 // Overrides match function in Card
 - (int)match:(NSArray *)otherCards
 {
+
+    int score = 0;
+    
+    if ([otherCards count])
+    {
+        for (PlayingCard *otherCard in otherCards)
+        {
+            if ([otherCard.suit isEqualToString:self.suit])
+            {
+                score += 1;
+            }
+            
+            else if (otherCard.rank == self.rank)
+            {
+                score += 4;
+            }
+            
+            else
+            {
+                score = 0;
+                break;
+            }
+        }
+    }
+    
+    return score;
+    
+    
+    //----------------------------------------------------------------------
+    // Old method for matching only 2 cards
+    //----------------------------------------------------------------------
+    
+    /*
+    
     int score = 0;
     
     // For now matching against a single card
@@ -41,6 +75,8 @@
     }
     
     return score;
+    
+    */
 }
 
 // Grabs the suit and number of a card

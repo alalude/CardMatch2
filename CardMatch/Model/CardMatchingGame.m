@@ -22,7 +22,15 @@
 
 @property (strong, nonatomic) NSMutableArray *cards; // of Card
 
+
 @end
+
+/*
+ // Testing Suite
+ NSLog(@"Rank Matched, Score %d", self.score);
+ NSLog(@"Card Contents - %@", card.contents);
+ NSLog(@"Other Card's Contents - %@", otherCard.contents);
+ */
 
 @implementation CardMatchingGame
 
@@ -33,33 +41,107 @@
     return _cards;
 }
 
+// Lazy instantiation
+- (int)numberOfMatchingCards
+{
+    if (!_numberOfMatchingCards) _numberOfMatchingCards = 2;
+    return _numberOfMatchingCards;
+}
+
+/*
+ 
+ Not sure this code is really necessary
+ 
+ - (void)setNumberOfMatchingCards:(int)numberOfMatchingCards
+ {
+ if (numberOfMatchingCards < 2) _numberOfMatchingCards = 2;
+ else if (numberOfMatchingCards > 3) _numberOfMatchingCards = 3;
+ else _numberOfMatchingCards = numberOfMatchingCards;
+ }
+ 
+ */
+
 #define MATCH_BONUS 4
 #define MISMATCH_PENALTY 2
 #define FLIP_COST 1
 
 
-/*
- Extract the results from the method below
- Then serve them up to be delivered in the UI
- 
- What we know:
- 1) Match Rank
- 2) Match Suit
- 3) Mismatch
- 4) Neutral FLip
- 
- // Testing Suite
- NSLog(@"Rank Matched, Score %d", self.score);
- NSLog(@"Card Contents - %@", card.contents);
- NSLog(@"Other Card's Contents - %@", otherCard.contents);
- 
- */
-
-
-
-
 - (void)flipCardAtIndex:(NSUInteger)index
 {
+    // First get the card at the designated index
+    Card *card = [self cardAtIndex:index];
+    
+    // Now confirm there's a card at the index and it is playable
+    if (card && !card.isUnplayable)
+    {
+        self.results = (@"Results"); // *!*
+        
+        // To prevent comparing a card to itself
+        if (!card.isFaceUp)
+        {
+            // self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents]; // *!*
+            
+            NSMutableArray *otherCards = [[NSMutableArray alloc] init];
+            NSMutableArray *otherContents = [[NSMutableArray alloc] init];
+            
+            // Before simply fliping the card, check to see if it matches a card that's already up
+            for (Card *otherCard in self.cards)
+            {
+                // If cards are playable, put them in arrays to work with
+                if (otherCard.isFaceUp && !otherCard.isUnplayable)
+                {
+                    [otherCards addObject:otherCard];
+                    [otherContents addObject:otherCard.contents];
+                }
+            }
+            
+           // If only one card is fliped
+            if ([otherCards count] < self.numberOfMatchingCards - 1)
+            {
+                self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents];
+            }
+            
+            else
+            {
+                int matchScore = [card match:otherCards];
+                
+                if (matchScore)
+                {
+                    card.unplayable = YES;
+                    
+                    for (Card *otherCard in otherCards)
+                    {
+                        otherCard.unplayable = YES;
+                    }
+                    
+                    self.score += matchScore * MATCH_BONUS;
+                    
+                    self.results = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card.contents, [otherContents componentsJoinedByString:@" & "], matchScore * MATCH_BONUS];
+                }
+                
+                else
+                {
+                    for (Card *otherCard in otherCards)
+                    {
+                        otherCard.faceUp = NO;
+                    }
+                    
+                    self.score -= MISMATCH_PENALTY;
+                    self.results =
+                    [NSString stringWithFormat:@"%@ & %@ don’t match! %d point penalty!", card.contents, [otherContents componentsJoinedByString:@" & "], MISMATCH_PENALTY];
+                }
+            }
+            self.score -= FLIP_COST;
+        }
+        card.faceUp = !card.faceUp;
+    }
+
+    
+    //----------------------------------------------------------------------
+    // Old method for matching only 2 cards
+    //----------------------------------------------------------------------
+    
+    /*
     // First get the card at the designated index
     Card *card = [self cardAtIndex:index];
     
@@ -129,7 +211,7 @@
         }
         // Now flip the card
         card.faceUp = !card.isFaceUp;
-    }
+    } */
 }
 
 - (Card *)cardAtIndex:(NSUInteger)index

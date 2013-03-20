@@ -24,6 +24,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *resultsLabel;
 
+@property (weak, nonatomic) IBOutlet UISegmentedControl *gameModeSelector;
+
 @end
 
 
@@ -36,20 +38,11 @@
     {
         _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
                                                   usingDeck:[[PlayingCardDeck alloc] init]];
+        [self gameModeChange:self.gameModeSelector];
     }
     return _game;
 }
 
-- (IBAction)dealCards:(UIButton *)sender
-{
-    // - (void)flipCardAtIndex:(NSUInteger)index
-    // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
-    // - (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
-    // deal new cards
-    CardMatchingGame *game = [self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
-    [self updateUI]; // get all cards face up
-    self.flipCount = 0; // reset flipCount
-}
 
 - (void)setCardButtons:(NSArray *)cardButtons
 {
@@ -118,5 +111,33 @@
 }
 
 
+- (IBAction)dealCards:(UIButton *)sender
+{
+    // - (void)flipCardAtIndex:(NSUInteger)index
+    // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
+    // - (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
+    // deal new cards
+    //CardMatchingGame *game = [self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
+    // or
+    self.game = nil;
+    [self updateUI]; // get all cards face up
+    self.flipCount = 0; // reset flipCount
+}
+
+- (IBAction)gameModeChange:(UISegmentedControl *)sender
+{
+    switch ([sender selectedSegmentIndex])
+    {
+        case 0:
+            self.game.numberOfMatchingCards = 2;
+            break;
+        case 1:
+            self.game.numberOfMatchingCards = 3;
+            break;
+        default:
+            self.game.numberOfMatchingCards = 2;
+            break;
+    }
+}
 
 @end

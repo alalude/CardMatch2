@@ -35,4 +35,6 @@
 // readonly = only has a getter
 @property (readonly, nonatomic) NSString *results;
 
+@property (nonatomic) int numberOfMatchingCards;
+
 @end
