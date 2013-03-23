@@ -68,6 +68,9 @@
 
 - (void)flipCardAtIndex:(NSUInteger)index
 {
+    //Disable game mode selector
+    self.activeModeControl = NO;
+    
     // First get the card at the designated index
     Card *card = [self cardAtIndex:index];
     
@@ -136,84 +139,6 @@
         card.faceUp = !card.faceUp;
     }
 
-    
-    //----------------------------------------------------------------------
-    // Old method for matching only 2 cards
-    //----------------------------------------------------------------------
-    
-    /*
-    // First get the card at the designated index
-    Card *card = [self cardAtIndex:index];
-    
-    // Now confirm there's a card at the index and it is playable
-    if (card && !card.unplayable)
-    {
-        self.results = (@"Results");
-        
-        // To prevent comparing a card to itself
-        if (!card.isFaceUp)
-        {
-            self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents];
-            
-            // Before simply fliping the card, check to see if it matches a card that's already up
-            for (Card *otherCard in self.cards)
-            {
-                
-                if(otherCard.isFaceUp && !otherCard.isUnplayable)
-                {
-                    int matchScore = [card match:@[otherCard]];
-                    
-                    // If there is a rank match i.e. matchScore > 1, points and "immobilization" are in order
-                    if(matchScore > 1)
-                    {
-                        card.unplayable = YES;
-                        otherCard.unplayable = YES;
-                        self.score += matchScore * MATCH_BONUS;
-                        
-                        // Results picked up for display
-                        // self.results = (@"Rank Matched");
-                        // self.results = [NSString stringWithFormat:@"Rank Matched: %d points", (matchScore * MATCH_BONUS)];
-                        self.results = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card.contents, otherCard.contents, (matchScore * MATCH_BONUS)];
-                        
-                    }
-                    // If there is a suit match i.e. matchScore = 1, points and "immobilization" are in order
-                    else if(matchScore)
-                    {
-                        card.unplayable = YES;
-                        otherCard.unplayable = YES;
-                        self.score += matchScore * MATCH_BONUS;
-                        
-                        // Results picked up for display
-                        // self.results = (@"Suit Matched");
-                        // self.results = [NSString stringWithFormat:@"Suit Matched: %d points", (matchScore * MATCH_BONUS)];
-                        self.results = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card.contents, otherCard.contents, (matchScore * MATCH_BONUS)];
-
-                    }
-                    // A failure to match means gettingput facedown
-                    else
-                    {
-                        otherCard.faceUp = NO;
-                        self.score -= MISMATCH_PENALTY;
-                        
-                        // Results picked up for display
-                        // self.results = (@"Mismatch");
-                        // FORMATTING self.flipsLabel.text = [NSString stringWithFormat:@"Flips: %d", self.flipCount];                        
-                        // self.results = [NSString stringWithFormat:@"Mismatch: %d point penalty", MISMATCH_PENALTY];
-                        self.results = [NSString stringWithFormat:@"%@ & %@ Don't match! %d point penalty", card.contents, otherCard.contents, MISMATCH_PENALTY];
-                    }
-                    // Breakout since we've found another face up card
-                    break;
-                }
-            }
-            // To create more of a challenge, there is a cost to flipping
-            self.score -= FLIP_COST; // Moved out of last loop            
-                        
-        }
-        // Now flip the card
-        card.faceUp = !card.isFaceUp;
-    }
-     
-     */
 }
 
 - (Card *)cardAtIndex:(NSUInteger)index
@@ -243,6 +168,7 @@
             }
         }
     }
+    self.activeModeControl = YES; // initialize game mode selector to active
     self.score = 0; // initialize score to zero (for new games)
     return self;
 }

@@ -52,11 +52,24 @@
     
 }
 
+- (void)setGameModeSelector:(UISegmentedControl *)gameModeSelector
+{
+    _gameModeSelector = gameModeSelector;
+    
+    [self updateUI];
+}
+
 // The method to update the UI
 // Objective 1: Make the UI look like the model
 // Objective 2: Inform the model of changes to the UI
 - (void)updateUI
 {
+    //-----------------------------------------------------------------------
+    // Create a variable for card backs
+    UIImage *cardBackImage = [UIImage imageNamed:@"cardback.png"];
+    UIControlState *currentState = nil;
+    int i = 1;
+    //-----------------------------------------------------------------------
     
     // Go through all your buttons and update all your cards
     for (UIButton *cardButton in self.cardButtons)
@@ -82,8 +95,29 @@
         
         // Ghost cards if matched to 30%
         cardButton.alpha = (card.isUnplayable ? 0.3 : 1.0);
+        
+        //-----------------------------------------------------------------------
+        NSLog(@"Current Control State %d", [cardButton state]);
+        // Display the car back if the card is face down
+        if (!card.isFaceUp)
+        {
+            [cardButton setImage:cardBackImage forState:UIControlStateNormal];
+            NSLog(@"Print Back %d", i);
+            //NSLog(@"Current Control State %@", );
+            i++;
+        }
+        
+        else
+        {
+            [cardButton setImage:nil forState:UIControlStateNormal];
+            NSLog(@"Print Front");
+        }
+        //-----------------------------------------------------------------------
     }
     
+    // Make sure the enbled state is correct
+    self.gameModeSelector.enabled = self.game.isActiveModeControl;
+
     // Update score on UI
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     

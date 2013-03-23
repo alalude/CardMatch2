@@ -23,6 +23,7 @@
 		E36F358C16E1831200FB92F9 /* PlayingCard.m in Sources */ = {isa = PBXBuildFile; fileRef = E36F358B16E1831200FB92F9 /* PlayingCard.m */; };
 		E36F358F16E184AE00FB92F9 /* PlayingCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = E36F358E16E184AE00FB92F9 /* PlayingCardDeck.m */; };
 		E38F3C1A16F6E20B00C6B0E7 /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = E38F3C1916F6E20B00C6B0E7 /* CardMatchingGame.m */; };
+		E3A56FE416FD10E6005F96B0 /* cardback.png in Resources */ = {isa = PBXBuildFile; fileRef = E3A56FE316FD10E6005F96B0 /* cardback.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		E36F358E16E184AE00FB92F9 /* PlayingCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayingCardDeck.m; path = Model/PlayingCardDeck.m; sourceTree = "<group>"; };
 		E38F3C1816F6E20B00C6B0E7 /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardMatchingGame.h; path = Model/CardMatchingGame.h; sourceTree = "<group>"; };
 		E38F3C1916F6E20B00C6B0E7 /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardMatchingGame.m; path = Model/CardMatchingGame.m; sourceTree = "<group>"; };
+		E3A56FE316FD10E6005F96B0 /* cardback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardback.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				E36F356916E0244100FB92F9 /* InfoPlist.strings */,
 				E36F356C16E0244100FB92F9 /* main.m */,
 				E36F356E16E0244100FB92F9 /* CardMatch-Prefix.pch */,
+				E3A56FE316FD10E6005F96B0 /* cardback.png */,
 				E36F357216E0244100FB92F9 /* Default.png */,
 				E36F357416E0244100FB92F9 /* Default@2x.png */,
 				E36F357616E0244100FB92F9 /* Default-568h@2x.png */,
@@ -197,6 +200,7 @@
 				E36F357516E0244100FB92F9 /* Default@2x.png in Resources */,
 				E36F357716E0244100FB92F9 /* Default-568h@2x.png in Resources */,
 				E36F357A16E0244100FB92F9 /* MainStoryboard.storyboard in Resources */,
+				E3A56FE416FD10E6005F96B0 /* cardback.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

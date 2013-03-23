@@ -46,38 +46,6 @@
     
     return score;
     
-    
-    //----------------------------------------------------------------------
-    // Old method for matching only 2 cards
-    //----------------------------------------------------------------------
-    
-    /*
-    
-    int score = 0;
-    
-    // For now matching against a single card
-    if ([otherCards count] == 1) // *!* Changed from 0 to 1
-    {
-        
-        PlayingCard *otherCard = [otherCards lastObject];
-        
-        // Points for matching suit
-        if([otherCard.suit isEqualToString:self.suit])
-        {
-            score = 1;
-        }
-        
-        // Points for matching rank
-        else if (otherCard.rank == self.rank)
-        {
-            score = 4;
-        }
-    }
-    
-    return score;
-    
-    */
-    
 }
 
 // Grabs the suit and number of a card

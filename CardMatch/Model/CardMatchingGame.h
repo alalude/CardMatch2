@@ -37,4 +37,6 @@
 
 @property (nonatomic) int numberOfMatchingCards;
 
+@property (nonatomic, getter = isActiveModeControl) BOOL activeModeControl;
+
 @end
