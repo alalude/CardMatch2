@@ -145,6 +145,35 @@
     return @{START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score)};
 }
 
+int i = 1;
+
+- (NSComparisonResult)compareDate:(GameResult *)aGameResult
+{
+    NSLog(@"Compared for Date");
+    NSLog(@"Date %@ (%d)", self.end, i);
+    i++;
+    
+    return ([self.end compare:aGameResult.end]);
+}
+
+- (NSComparisonResult)compareScore:(GameResult *)aGameResult
+{
+    NSLog(@"Compared for Score");
+    NSLog(@"Score %d (%d)", self.score, i);
+    i++;
+    
+    return ([@(self.score) compare:@(aGameResult.score)]);
+}
+
+- (NSComparisonResult)compareDuration:(GameResult *)aGameResult
+{
+    NSLog(@"Compared for Duration");
+    NSLog(@"Duration %0g (%d)", self.duration, i);
+    i++;
+    
+    return ([@(self.duration) compare:@(aGameResult.duration)]);
+}
+
 @end
 
 

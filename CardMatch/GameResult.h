@@ -26,4 +26,8 @@
 
 @property (nonatomic) int score;
 
+- (NSComparisonResult)compareDate:(GameResult *)aGameResult;
+- (NSComparisonResult)compareScore:(GameResult *)aGameResult;
+- (NSComparisonResult)compareDuration:(GameResult *)aGameResult;
+
 @end

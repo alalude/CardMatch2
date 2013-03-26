@@ -6,11 +6,18 @@
 //  Copyright (c) 2013 Akinbiyi Lalude. All rights reserved.
 //
 
+//
+// Coded in
+// CS193 Winter 2013
+// Lecture 5
+//
+
 #import "GameResultsViewController.h"
 #import "GameResult.h"
 
 @interface GameResultsViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *display;
+@property (strong, nonatomic) NSArray *allGameResults;
 
 @end
 
@@ -20,9 +27,22 @@
 - (void)updateUI
 {
     NSString *displayText = @""; // start with a blank screen
-    for (GameResult *result in [GameResult allGameResults])
+    
+    // NSLog(@"GameResult UI update");
+    for (GameResult *result in self.allGameResults) // in [GameResult allGameResults]
     {
-        displayText = [displayText stringByAppendingFormat:@"Score: %d (%@, %0g)\n  ", result.score, result.end, round(result.duration)]; // 0g is an unformatted floating point number
+        //displayText = [displayText stringByAppendingFormat:@"Score: %d (%@, %0g)\n  ", result.score, result.end, round(result.duration)]; // 0g is an unformatted floating point number
+        
+        // NSLog(@"Score: %d (%@, %0g)", result.score, result.end, round(result.duration));
+        
+        
+        // Display text with formatted date/time
+        displayText = [displayText stringByAppendingFormat:@"Score: %d (%@, %0g)\n  ", result.score,
+                       [NSDateFormatter localizedStringFromDate:result.end
+                                                      dateStyle:NSDateFormatterShortStyle
+                                                      timeStyle:NSDateFormatterShortStyle],
+                       round(result.duration)]; // 0g is an unformatted floating point number
+        
     }
     
     self.display.text = displayText;
@@ -31,6 +51,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.allGameResults = [GameResult allGameResults];
     [self updateUI];
 }
 
@@ -54,6 +75,49 @@
         [self setup]; //*!*
     }
     return self;
+}
+- (IBAction)sortByDate
+{
+    NSLog(@"By Date pushed");
+    self.allGameResults = [self.allGameResults sortedArrayUsingSelector:@selector(compareDate:)];
+    
+    //----------------------------------------------------------------------------------
+    NSLog(@"GameResult UI update for Date");
+    for (GameResult *result in [GameResult allGameResults])
+    {
+        NSLog(@"Score: %d (%@, %0g)", result.score, result.end, round(result.duration));
+    }
+    
+    [self updateUI];
+}
+
+- (IBAction)sortByScore
+{
+    NSLog(@"By Score pushed");
+    self.allGameResults = [self.allGameResults sortedArrayUsingSelector:@selector(compareScore:)];
+    
+    //----------------------------------------------------------------------------------
+    NSLog(@"GameResult UI update for Score");
+    for (GameResult *result in [GameResult allGameResults])
+    {
+        NSLog(@"Score: %d (%@, %0g)", result.score, result.end, round(result.duration));
+    }
+    
+    [self updateUI];
+}
+
+- (IBAction)sortByDuration
+{
+    NSLog(@"By Duration pushed");
+    self.allGameResults = [self.allGameResults sortedArrayUsingSelector:@selector(compareDuration:)];
+    
+    //----------------------------------------------------------------------------------
+    NSLog(@"GameResult UI update for Duration");
+    for (GameResult *result in [GameResult allGameResults])
+    {
+        NSLog(@"Score: %d (%@, %0g)", result.score, result.end, round(result.duration));
+    }
+    [self updateUI];
 }
 
 /*
