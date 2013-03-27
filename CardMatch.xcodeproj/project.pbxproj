@@ -26,6 +26,7 @@
 		E3A56FE416FD10E6005F96B0 /* cardback.png in Resources */ = {isa = PBXBuildFile; fileRef = E3A56FE316FD10E6005F96B0 /* cardback.png */; };
 		E3E59F78170007C9001A9A3D /* GameResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3E59F77170007C9001A9A3D /* GameResultsViewController.m */; };
 		E3E59F7B1700103A001A9A3D /* GameResult.m in Sources */ = {isa = PBXBuildFile; fileRef = E3E59F7A1700103A001A9A3D /* GameResult.m */; };
+		E3E59F7E170243E7001A9A3D /* SetGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3E59F7D170243E7001A9A3D /* SetGameViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,8 @@
 		E3E59F77170007C9001A9A3D /* GameResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameResultsViewController.m; sourceTree = "<group>"; };
 		E3E59F791700103A001A9A3D /* GameResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameResult.h; sourceTree = "<group>"; };
 		E3E59F7A1700103A001A9A3D /* GameResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameResult.m; sourceTree = "<group>"; };
+		E3E59F7C170243E7001A9A3D /* SetGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetGameViewController.h; sourceTree = "<group>"; };
+		E3E59F7D170243E7001A9A3D /* SetGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetGameViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +113,8 @@
 				E36F358916E0804B00FB92F9 /* Model */,
 				E3E59F791700103A001A9A3D /* GameResult.h */,
 				E3E59F7A1700103A001A9A3D /* GameResult.m */,
+				E3E59F7C170243E7001A9A3D /* SetGameViewController.h */,
+				E3E59F7D170243E7001A9A3D /* SetGameViewController.m */,
 				E36F357B16E0244100FB92F9 /* CardGameViewController.h */,
 				E36F357C16E0244100FB92F9 /* CardGameViewController.m */,
 				E3E59F76170007C9001A9A3D /* GameResultsViewController.h */,
@@ -231,6 +236,7 @@
 				E38F3C1A16F6E20B00C6B0E7 /* CardMatchingGame.m in Sources */,
 				E3E59F78170007C9001A9A3D /* GameResultsViewController.m in Sources */,
 				E3E59F7B1700103A001A9A3D /* GameResult.m in Sources */,
+				E3E59F7E170243E7001A9A3D /* SetGameViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
