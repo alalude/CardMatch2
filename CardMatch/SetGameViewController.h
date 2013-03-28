@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Akinbiyi Lalude. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "CardGameViewController.h"
 
 @interface SetGameViewController : UIViewController
 

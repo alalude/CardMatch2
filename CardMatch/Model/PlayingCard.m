@@ -16,6 +16,11 @@
 
 @implementation PlayingCard
 
+
+//-----------------------------------------------------------------
+// Matching method for PlayingCardGame
+//-----------------------------------------------------------------
+
 // Overrides match function in Card
 - (int)match:(NSArray *)otherCards
 {
@@ -48,6 +53,11 @@
     
 }
 
+
+//-----------------------------------------------------------------
+// Content fetcher method for PlayingCards
+//-----------------------------------------------------------------
+
 // Grabs the suit and number of a card
 - (NSString *)contents
 {
@@ -55,13 +65,18 @@
     return [rankString[self.rank] stringByAppendingString:self.suit];
 }
 
+
+//-----------------------------------------------------------------
+// Setters and getters DUPLICATED
+//-----------------------------------------------------------------
+
 // Only necessary because both setter and getter manually created
 @synthesize suit = _suit;
 
 // The "setter" for suit
 -(void)setSuit:(NSString *)suit
 {
-    if([[PlayingCard validSuits] containsObject:suit])
+    if([[[self class] validSuits] containsObject:suit]) // *!* PlayingCard = [self class]
     {
         _suit = suit;
     }
@@ -74,11 +89,16 @@
 
 - (void)setRank:(NSUInteger)rank
 {
-    if (rank <= [PlayingCard maxRank])
+    if (rank <= [[self class] maxRank]) // *!* PlayingCard = [self class]
     {
         _rank = rank;
     }
 }
+
+
+//-----------------------------------------------------------------
+// Raw materials to build PlayingCards DUPLICATED
+//-----------------------------------------------------------------
 
 // Method does work directly on class not eligible to use @property
 + (NSArray *)validSuits
