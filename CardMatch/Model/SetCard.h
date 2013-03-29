@@ -21,6 +21,8 @@
 @property (nonatomic) CGFloat shade;
 @property (strong, nonatomic) UIColor *color;
 
+@property (strong, nonatomic) NSDictionary  *rawContents;
+
 + (NSArray *)validSuits;
 + (NSArray *)validRanks;
 + (NSArray *)validColors;

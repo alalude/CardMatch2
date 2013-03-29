@@ -38,13 +38,18 @@
                     for (NSNumber *shade in [SetCard validShades])
                     {
                         SetCard *card = [[SetCard alloc] init];
+                        
+                        card.rawContents = @{@"suit" : suit, @"rank" : rank, @"color" : color, @"shade" : shade};
+                        
                         // calling the setters
-                        card.suit = suit; // inheritance issue -- forced to add property to SetCard.h
-                        card.rank = [rank intValue];
-                        card.color = color;
-                        card.shade = [shade floatValue];
+                        //--------------------
+                        // card.suit = suit; // inheritance issue -- forced to add property to SetCard.h
+                        // card.rank = [rank intValue];
+                        // card.color = color;
+                        // card.shade = [shade floatValue];
                         
                         // testing
+                        //--------
                         //card.unplayable = YES;                        
                         
                         [self addCard:card atTop:YES];
@@ -59,35 +64,3 @@
 }
 
 @end
-
-
-/*
-- (id)init
-{
-    // This line is a very rare case
-    self = [super init];
-    
-    if (self)
-    {
-        for (NSString *suit in [PlayingCard validSuits])
-        {
-            for (NSUInteger rank = 1; rank <= [PlayingCard maxRank]; rank++)
-            {
-                PlayingCard *card = [[PlayingCard alloc] init];
-                // calling the setters
-                card.rank = rank;
-                card.suit = suit;
-                
-                [self addCard:card atTop:YES];
-            }
-        }
-        
-    }
-    
-    return self;
-    
-}
-*/
-
-
-
