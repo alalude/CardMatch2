@@ -87,7 +87,7 @@
 {
     // Create a variable for card backs
     UIImage *cardBackImage = [UIImage imageNamed:@"cardback.png"];
-    UIControlState *currentState = nil;
+    // UIControlState *currentState = nil;                                 *!* gave warning for ages
     
     // Go through all your buttons and update all your cards
     for (UIButton *cardButton in self.cardButtons)

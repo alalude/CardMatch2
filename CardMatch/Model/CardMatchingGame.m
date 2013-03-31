@@ -44,7 +44,7 @@
 // Lazy instantiation
 - (int)numberOfMatchingCards
 {
-    if (!_numberOfMatchingCards) _numberOfMatchingCards = 2;
+    if (!_numberOfMatchingCards) _numberOfMatchingCards = 3; // 3... Hopefully will work for both games
     return _numberOfMatchingCards;
 }
 

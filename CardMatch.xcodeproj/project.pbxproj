@@ -29,6 +29,8 @@
 		E3E59F7E170243E7001A9A3D /* SetGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E3E59F7D170243E7001A9A3D /* SetGameViewController.m */; };
 		E3E7E3F217037E1B00B5BB31 /* SetCard.m in Sources */ = {isa = PBXBuildFile; fileRef = E3E7E3F117037E1B00B5BB31 /* SetCard.m */; };
 		E3E7E3F61703CAC200B5BB31 /* SetCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = E3E7E3F51703CAC200B5BB31 /* SetCardDeck.m */; };
+		E3E7E3F91705298100B5BB31 /* SetCardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = E3E7E3F81705298100B5BB31 /* SetCardMatchingGame.m */; };
+		E3E7E3FB1705461400B5BB31 /* cardshading.png in Resources */ = {isa = PBXBuildFile; fileRef = E3E7E3FA1705461400B5BB31 /* cardshading.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +71,9 @@
 		E3E7E3F117037E1B00B5BB31 /* SetCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SetCard.m; path = Model/SetCard.m; sourceTree = "<group>"; };
 		E3E7E3F41703CAC200B5BB31 /* SetCardDeck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SetCardDeck.h; path = Model/SetCardDeck.h; sourceTree = "<group>"; };
 		E3E7E3F51703CAC200B5BB31 /* SetCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SetCardDeck.m; path = Model/SetCardDeck.m; sourceTree = "<group>"; };
+		E3E7E3F71705298100B5BB31 /* SetCardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SetCardMatchingGame.h; path = Model/SetCardMatchingGame.h; sourceTree = "<group>"; };
+		E3E7E3F81705298100B5BB31 /* SetCardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SetCardMatchingGame.m; path = Model/SetCardMatchingGame.m; sourceTree = "<group>"; };
+		E3E7E3FA1705461400B5BB31 /* cardshading.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardshading.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +146,7 @@
 				E36F356C16E0244100FB92F9 /* main.m */,
 				E36F356E16E0244100FB92F9 /* CardMatch-Prefix.pch */,
 				E3A56FE316FD10E6005F96B0 /* cardback.png */,
+				E3E7E3FA1705461400B5BB31 /* cardshading.png */,
 				E36F357216E0244100FB92F9 /* Default.png */,
 				E36F357416E0244100FB92F9 /* Default@2x.png */,
 				E36F357616E0244100FB92F9 /* Default-568h@2x.png */,
@@ -172,6 +178,8 @@
 				E3E7E3F117037E1B00B5BB31 /* SetCard.m */,
 				E3E7E3F41703CAC200B5BB31 /* SetCardDeck.h */,
 				E3E7E3F51703CAC200B5BB31 /* SetCardDeck.m */,
+				E3E7E3F71705298100B5BB31 /* SetCardMatchingGame.h */,
+				E3E7E3F81705298100B5BB31 /* SetCardMatchingGame.m */,
 			);
 			name = SetModel;
 			sourceTree = "<group>";
@@ -234,6 +242,7 @@
 				E36F357716E0244100FB92F9 /* Default-568h@2x.png in Resources */,
 				E36F357A16E0244100FB92F9 /* MainStoryboard.storyboard in Resources */,
 				E3A56FE416FD10E6005F96B0 /* cardback.png in Resources */,
+				E3E7E3FB1705461400B5BB31 /* cardshading.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,6 +266,7 @@
 				E3E59F7E170243E7001A9A3D /* SetGameViewController.m in Sources */,
 				E3E7E3F217037E1B00B5BB31 /* SetCard.m in Sources */,
 				E3E7E3F61703CAC200B5BB31 /* SetCardDeck.m in Sources */,
+				E3E7E3F91705298100B5BB31 /* SetCardMatchingGame.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

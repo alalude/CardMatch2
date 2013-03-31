@@ -6,6 +6,12 @@
 //  Copyright (c) 2013 Akinbiyi Lalude. All rights reserved.
 //
 
+//
+// Coded in
+// CS193 Winter 2013
+// Assignment 2
+//
+
 #import "PlayingCard.h"
 
 @interface SetCard : Card

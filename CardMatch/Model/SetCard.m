@@ -6,6 +6,12 @@
 //  Copyright (c) 2013 Akinbiyi Lalude. All rights reserved.
 //
 
+//
+// Coded in
+// CS193 Winter 2013
+// Assignment 2
+//
+
 #import "SetCard.h"
 
 
@@ -153,7 +159,7 @@
 //-----------------------------------------------------------------
 
 // Grabs the attributed text of a card
-- (NSAttributedString *)contents
+- (id)contents
 {
     /*
      - (void)addTextAttributes:(NSDictionary *)attributes range:(NSRange) range
@@ -161,29 +167,127 @@
      }
      */
     
+    /*
+     - (NSString *)contents
+     {
+     NSArray *rankString = [PlayingCard rankStrings];
+     return [rankString[self.rank] stringByAppendingString:self.suit];
+     }
+     */
+    
     // initWithObjects:forKeys:
+    
+    
+    /*
+     
+     
+     
+     if ([otherCards count] > 1)
+     {
+     for (SetCard *otherCard in otherCards)
+     {
+     otherCardsDic = @{@(dicID) : otherCard.rawContents};
+     dicID++;
+     }
+     */
+    NSDictionary  *contentPlusAttirbutes;
     
     NSString *cardSuit = [self.rawContents objectForKey: @"suit"];
     NSInteger cardRank = [[self.rawContents objectForKey: @"rank"] intValue];
     UIColor *cardColor = [self.rawContents objectForKey: @"color"];
     CGFloat cardShade = [[self.rawContents objectForKey: @"shade"] floatValue];
     
+    NSString *suitAppendage = @"";
+    
     for (NSUInteger loopCount = cardRank; loopCount > 1; loopCount--)
     {
-        cardSuit = [cardSuit stringByAppendingString: cardSuit];
-    }
+        suitAppendage = [suitAppendage stringByAppendingString: cardSuit];
+    }    
     
-    NSRange textRange = [cardSuit rangeOfString: cardSuit];
-
-    NSMutableAttributedString *cardText = [cardSuit mutableCopy];
-
+    cardSuit = [cardSuit stringByAppendingString: suitAppendage];
+    
+    
+    
+    
     NSDictionary *cardTextAttributes = @{NSForegroundColorAttributeName : [cardColor colorWithAlphaComponent: cardShade],
                                              NSStrokeWidthAttributeName : @-3,
                                              NSStrokeColorAttributeName : cardColor};
     
-    [cardText addAttributes:cardTextAttributes range: textRange];
     
-    return cardText;
+    contentPlusAttirbutes = @{@"contents" : cardSuit, @"attributes" : cardTextAttributes};
+    
+    
+    
+    
+    
+    NSRange textRange = [cardSuit rangeOfString: cardSuit];
+    // NSLog(@"textRange.length %i", textRange.length);
+    // NSLog(@"textRange.location %i", textRange.location);
+
+    
+    if (textRange.location != NSNotFound)
+    {
+        // - (void)replaceCharactersInRange:(NSRange)aRange withString:(NSString *)aString
+    
+        /*
+        // Get a mutable version of the string to work with
+        NSMutableAttributedString *mat = [self.label.attributedText mutableCopy];
+        
+        // Add attributes to the range of text
+        [mat addAttributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)}
+                     range:range];
+        
+        // Update the attributed text
+        self.label.attributedText = mat;
+         */
+        
+        
+/*
+        
+        
+         NSMutableAttributedString *mat;
+         // mat = [[NSMutableAttributedString alloc] init];
+        mat = self.
+        [mat replaceCharactersInRange:textRange withString:cardSuit];
+        
+        
+        
+        
+        
+        
+        //= [cardSuit mutableCopy];
+        
+        //[mat addAttributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)} range:textRange];
+        
+        cardSuit = [mat copy];
+        
+*/
+        
+        
+        /*
+        NSMutableAttributedString *cardText = [cardSuit mutableCopy];
+    
+
+        // NSDictionary *cardTextAttributes = @{NSForegroundColorAttributeName : [cardColor colorWithAlphaComponent: cardShade],
+        //                                         NSStrokeWidthAttributeName : @-3,
+        //                                         NSStrokeColorAttributeName : cardColor};
+        
+        // [cardText addAttributes:cardTextAttributes range: textRange];
+        // [cardText addAttributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)} range: textRange];
+        
+        cardSuit = cardText;
+        NSLog(@"cardText %@", cardText);
+        */
+    }
+    
+    /*
+    
+     return [cardText copy]; // converting it back to nsstring
+    */
+    
+    
+    
+    return contentPlusAttirbutes;
 }
 
 //-----------------------------------------------------------------
