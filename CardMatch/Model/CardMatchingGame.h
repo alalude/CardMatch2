@@ -33,7 +33,8 @@
 
 // Results for Display
 // readonly = only has a getter
-@property (readonly, nonatomic) NSString *results;
+@property (readonly, nonatomic) id results;  // NSString or NSDictionary
+@property (nonatomic) NSUInteger deckIndex;
 
 @property (nonatomic) int numberOfMatchingCards;
 

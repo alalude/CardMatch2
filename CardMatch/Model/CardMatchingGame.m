@@ -18,7 +18,7 @@
 // readwrite = unnesscary
 @property (readwrite, nonatomic) int score;
 
-@property (readwrite, nonatomic) NSString *results;
+@property (readwrite, nonatomic) id results; // NSString or NSMutableAttributedString
 
 @property (strong, nonatomic) NSMutableArray *cards; // of Card
 
@@ -65,8 +65,7 @@
 #define MISMATCH_PENALTY 2
 #define FLIP_COST 1
 
-
-- (void)flipCardAtIndex:(NSUInteger)index
+- (void)flipCardAtIndex:(NSUInteger)index            // --- Start the War Here --- //
 {
     //Disable game mode selector
     self.activeModeControl = NO;
@@ -74,16 +73,49 @@
     // First get the card at the designated index
     Card *card = [self cardAtIndex:index];
     
+    
+    
+    // ---------------------------------------------------
+    /*
+    // self.deckIndex = index;
+    //NSLog(@"self.deckIndex %d", self.deckIndex);
+    
+    if ([card.contents isKindOfClass: [NSAttributedString class]])                                           // card.contents //
+    {
+        NSLog(@"NSAttributedString card.contents %@", [card.contents string]);
+    }
+    else if ([card.contents isKindOfClass: [NSAttributedString class]])                                           // card.contents //
+    {
+        NSLog(@"NSMutableAttributedString card.contents %@", [card.contents string]);
+    }
+    else
+    {
+        NSLog(@"Introspection failure %@", [card.contents string]);
+    }
+     */
+    // ---------------------------------------------------
+
+    
+   
     // Now confirm there's a card at the index and it is playable
     if (card && !card.isUnplayable)
     {
-        self.results = (@"Results"); // *!*
+        
+        if ([card.contents isKindOfClass: [NSAttributedString class]])
+        {
+            self.results = [[NSMutableAttributedString alloc] initWithString:@"Results"];
+            NSLog(@"self.results init %@", [self.results string]);
+        }
+        else
+        {
+            self.results = (@"Results");                                                                        // *!*
+        }
+        
+        
         
         // To prevent comparing a card to itself
         if (!card.isFaceUp)
         {
-            // self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents]; // *!*
-            
             NSMutableArray *otherCards = [[NSMutableArray alloc] init];
             NSMutableArray *otherContents = [[NSMutableArray alloc] init];
             
@@ -98,42 +130,156 @@
                 }
             }
             
-           // If only one card is fliped
-            if ([otherCards count] < self.numberOfMatchingCards - 1)
+            
+            if ([card.contents isKindOfClass: [NSAttributedString class]])
             {
-                self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents];
+                // NSDictionary  *otherCardsDic = [[NSDictionary alloc] init];
+                NSMutableDictionary  *otherCardsDic = [[NSMutableDictionary alloc] init];
+                
+                int dicID = 1;
+                
+                for (Card *otherCard in otherCards)
+                {
+                    //otherCardsDic = @{@(dicID) : otherCard.contents};
+                    [otherCardsDic setObject:otherCard.contents forKey: @(dicID)];
+                    
+                    NSLog(@"dicID %i, entry %@", dicID, [otherCard.contents string]);
+                    dicID++;
+                    
+                }
+                
+                // Dynamic text for resultsLabel
+                NSMutableAttributedString *mainCard = [card.contents mutableCopy];
+                NSMutableAttributedString *secondCard = [[otherCardsDic objectForKey: @(1)] mutableCopy];
+                NSMutableAttributedString *thirdCard = [[otherCardsDic objectForKey: @(2)] mutableCopy];
+                
+                // Static text for resultsLabel
+                NSMutableAttributedString *ampersand = [[NSMutableAttributedString alloc] initWithString:@" & "];
+                NSMutableAttributedString *areASet = [[NSMutableAttributedString alloc] initWithString:@" are a set"];
+                NSMutableAttributedString *arentASet = [[NSMutableAttributedString alloc] initWithString:@" aren't a set"];
+                
+                NSRange textRange = [[self.results string] rangeOfString: [self.results string]];
+            
+                
+                // If only one card is fliped
+                if ([otherCards count] < 2)                                     // self.numberOfMatchingCards
+                {
+                    // self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents];           // *!*
+                    
+                    [self.results replaceCharactersInRange:textRange withString:@"Flipped up "];
+                    [self.results appendAttributedString: mainCard];                    
+                }
+                
+                
+                else
+                {
+                    int matchScore = [card match:otherCards];                                               // card.contents
+                    
+                    if (matchScore)
+                    {
+                        
+                        card.unplayable = YES;
+                        
+                        for (Card *otherCard in otherCards)
+                        {
+                            otherCard.unplayable = YES;
+                        }
+                        
+                        self.score += matchScore * MATCH_BONUS * MATCH_BONUS;
+                        NSLog(@"Score for set: %d", self.score);
+                        
+                        //self.results = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card.contents, [otherContents componentsJoinedByString:@" & "], matchScore * MATCH_BONUS];
+                        
+                        
+                        [self.results replaceCharactersInRange:textRange withString:@"Yes, "];
+                        [self.results appendAttributedString: thirdCard];
+                        [self.results appendAttributedString: ampersand];
+                        [self.results appendAttributedString: secondCard];
+                        [self.results appendAttributedString: ampersand];
+                        [self.results appendAttributedString: mainCard];
+                        [self.results appendAttributedString: areASet];
+                        
+                        NSLog(@"3 form a match: %@", [self.results string]);
+                        
+                    }
+                    
+                    
+                    else
+                    {
+                        
+                        for (Card *otherCard in otherCards)
+                        {
+                            otherCard.faceUp = NO;
+                        }
+                        
+                        self.score -= MISMATCH_PENALTY;
+                        NSLog(@"Score for no set: %d", self.score);
+                        
+                        // self.results = [NSString stringWithFormat:@"%@ & %@ don’t match! %d point penalty!", card.contents, [otherContents componentsJoinedByString:@" & "], MISMATCH_PENALTY];
+                        
+                        
+                        [self.results replaceCharactersInRange:textRange withString:@"No, "];
+                        [self.results appendAttributedString: thirdCard];
+                        [self.results appendAttributedString: ampersand];
+                        [self.results appendAttributedString: secondCard];
+                        [self.results appendAttributedString: ampersand];
+                        [self.results appendAttributedString: mainCard];
+                        [self.results appendAttributedString: arentASet];
+                        
+                        NSLog(@"3 don't form a match: %@", [self.results string]);
+                         
+                    }
+                    
+                    
+                }
             }
+            
+            
             
             else
             {
-                int matchScore = [card match:otherCards];
-                
-                if (matchScore)
+                // If only one card is fliped
+                if ([otherCards count] < self.numberOfMatchingCards - 1)
                 {
-                    card.unplayable = YES;
-                    
-                    for (Card *otherCard in otherCards)
-                    {
-                        otherCard.unplayable = YES;
-                    }
-                    
-                    self.score += matchScore * MATCH_BONUS;
-                    
-                    self.results = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card.contents, [otherContents componentsJoinedByString:@" & "], matchScore * MATCH_BONUS];
+                    self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents];
                 }
                 
                 else
                 {
-                    for (Card *otherCard in otherCards)
+                    NSLog(@"flipCardAtIndex: 2+ cards flipped");
+                    int matchScore = [card match:otherCards];
+                    
+                    if (matchScore)
                     {
-                        otherCard.faceUp = NO;
+                        card.unplayable = YES;
+                        
+                        for (Card *otherCard in otherCards)
+                        {
+                            otherCard.unplayable = YES;
+                        }
+                        
+                        self.score += matchScore * MATCH_BONUS;                                             
+                        
+                        self.results = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card.contents, [otherContents componentsJoinedByString:@" & "], matchScore * MATCH_BONUS];
                     }
                     
-                    self.score -= MISMATCH_PENALTY;
-                    self.results =
-                    [NSString stringWithFormat:@"%@ & %@ don’t match! %d point penalty!", card.contents, [otherContents componentsJoinedByString:@" & "], MISMATCH_PENALTY];
+                    else
+                    {
+                        for (Card *otherCard in otherCards)
+                        {
+                            otherCard.faceUp = NO;
+                        }
+                        
+                        self.score -= MISMATCH_PENALTY;                                                    
+                        self.results =
+                        [NSString stringWithFormat:@"%@ & %@ don’t match! %d point penalty!", card.contents, [otherContents componentsJoinedByString:@" & "], MISMATCH_PENALTY];
+                    }
                 }
-            }
+             }
+             
+            
+       
+            
             self.score -= FLIP_COST;
         }
         card.faceUp = !card.faceUp;

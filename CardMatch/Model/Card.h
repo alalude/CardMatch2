@@ -16,7 +16,8 @@
 
 @interface Card : NSObject
 
-@property (strong, nonatomic) id contents; // formerly NSString *contents
+@property (strong, nonatomic) id contents; // formerly NSString *contents now can be NSMutableAttributedString
+@property (strong, nonatomic) NSMutableAttributedString *cardAttributedString;
 
 @property (nonatomic, getter = isFaceUp) BOOL faceUp;
 @property (nonatomic, getter = isUnplayable) BOOL unplayable;

@@ -29,8 +29,10 @@
 @property (strong, nonatomic) NSMutableArray *history;
 
 // *** IBOutlet UILabel *scoreLabel
+@property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 
 // *** IBOutlet UILabel *resultsLabel
+@property (weak, nonatomic) IBOutlet UILabel *resultsLabel;
 
 // xxx IBOutlet UISegmentedControl *gameModeSelector;
 
@@ -45,6 +47,28 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+        // --- get font size from resultsLabel -----------------------------------------------
+        
+        // Initialize fontSize
+        CGFloat fontSize = [UIFont systemFontSize];
+        
+        // Must ask for current font size because font and size are package together,
+        // but we only want to grab font from the button
+        NSDictionary *attributes = [self.resultsLabel.attributedText attributesAtIndex:0 effectiveRange:NULL];
+        
+        // Looking up in the dictionary what the font is
+        UIFont *existingFont = attributes[NSFontAttributeName];
+        
+        // If a font is found take font size by itself
+        if (existingFont) fontSize = existingFont.pointSize;  // font size from label
+        
+        NSLog(@" ~ s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
+        NSLog(@" ~ existingFont.pointSize %f", existingFont.pointSize);
+        
+        // -----------------------------------------------------------------------------------
+    
+
     [self updateUI];
 }
 
@@ -86,39 +110,157 @@
         
         // Setting all of the card's features
         
-        // *!* ---------------------------------------------
-        // Set card value
-       
+        // NSLog(@"in updateUI card.contents %@", [card.contents string]);
         
-        NSString *cardContents = [card.contents objectForKey: @"contents"];
-        NSLog(@"In UI update on flip %@", cardContents); // *!*this is a dic now
+        [cardButton setAttributedTitle:card.contents forState:UIControlStateNormal];
+        [cardButton setAttributedTitle:card.contents forState:UIControlStateSelected];
+        [cardButton setBackgroundImage:cardBackImage forState:UIControlStateSelected];
+        [cardButton setAttributedTitle:card.contents forState:UIControlStateSelected | UIControlStateDisabled];
+        [cardButton setBackgroundImage:cardBackImage forState:UIControlStateSelected | UIControlStateDisabled];
         
-        NSDictionary *cardTextAttributes = [card.contents objectForKey: @"attributes"];
+         
+        // Make sure correct state is selected
+        cardButton.selected = card.isFaceUp;
+        
+        // Make sure the enbled state is correct
+        cardButton.enabled = !card.isUnplayable;
+        
+        // Ghost cards if matched to 30%
+        cardButton.alpha = (card.isUnplayable ? 0.05 : 1.0);
+        
+        // Display the card back if the card is face down
+        if (!card.isFaceUp)
+        {
+            [cardButton setBackgroundImage:nil forState:UIControlStateNormal];
+        }
+        
+        else
+        {
+            [cardButton setBackgroundImage:cardBackImage forState:UIControlStateNormal]; // this made need changing
+        }
+    }
+    
+    // Update score on UI
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
+    
+    // Update results on UI
+    if (self.resultsLabel.attributedText)
+    {    
+        // --- get font size from resultsLabel -----------------------------------------------
+        
+            // Initialize fontSize
+            CGFloat fontSize = [UIFont systemFontSize];
+
+            // Must ask for current font size because font and size are package together,
+            // but we only want to grab font from the button
+            NSDictionary *attributes = [self.resultsLabel.attributedText attributesAtIndex:0 effectiveRange:NULL];
+            
+            // Looking up in the dictionary what the font is
+            UIFont *existingFont = attributes[NSFontAttributeName];
+            
+            // If a font is found take font size by itself
+            if (existingFont) fontSize = existingFont.pointSize;  // font size from label
+            
+            NSLog(@"self.resultsLabel.attributedText: %@", [self.resultsLabel.attributedText string]);
+            NSLog(@"existingFont.pointSize %f", existingFont.pointSize);
+            
+        // -----------------------------------------------------------------------------------
+        
+        // update results
+        
+        NSLog(@" A s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
+        NSLog(@" B existingFont.pointSize %f", existingFont.pointSize);
+        
+        if (self.game.results) self.resultsLabel.attributedText = self.game.results;
+        
+        //---
+            NSLog(@" C s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
+
+            // --- get font size from resultsLabel -----------------------------------------------
+            
+                attributes = [self.resultsLabel.attributedText attributesAtIndex:0 effectiveRange:NULL];
+                existingFont = attributes[NSFontAttributeName];
+                if (existingFont) fontSize = existingFont.pointSize;  // font size from label
+                NSLog(@" D existingFont.pointSize %f", existingFont.pointSize);
+
+            // -----------------------------------------------------------------------------------
+        //---
+        
+        
+        // --- add attribute to range --------------------------------------------------------
+        
+            NSRange range = [[self.resultsLabel.attributedText string] rangeOfString:[self.resultsLabel.attributedText string]];
+            
+            // Assuming the range has been found
+            if (range.location != NSNotFound)
+            {
+                // Get a mutable version of the string to work with
+                NSMutableAttributedString *mat = [self.resultsLabel.attributedText mutableCopy];
+                
+                // Add attributes to the range of text
+                [mat addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:range];
+                
+                // Update the attributed text
+                self.resultsLabel.attributedText = mat;
+            }
+        
+        // -----------------------------------------------------------------------------------
+        
+        //---
+            NSLog(@" E s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
+            
+            // --- get font size from resultsLabel -----------------------------------------------
+            
+            attributes = [self.resultsLabel.attributedText attributesAtIndex:0 effectiveRange:NULL];
+            existingFont = attributes[NSFontAttributeName];
+            if (existingFont) fontSize = existingFont.pointSize;  // font size from label
+            NSLog(@" F existingFont.pointSize %f", existingFont.pointSize);
+            
+            // -----------------------------------------------------------------------------------
+        //---
+        
         
         /*
-        NSDictionary *cardTextAttributes = @{NSForegroundColorAttributeName : [[UIColor greenColor] colorWithAlphaComponent: 0.2],
-                                                 NSStrokeWidthAttributeName : @-3,
-                                                 NSStrokeColorAttributeName : [UIColor greenColor]};
+        //Set font with font from button and size from label
+        UIFont *font = [sender.titleLabel.font fontWithSize:fontSize];
+        
+        // Update label
+        [self addSelectedWordAttributes:@{NSFontAttributeName : font}];
+        
+        
+        
+        
+        addAttributes:range:
+        
         */
-        
-        NSRange textRange = [[cardButton.currentAttributedTitle string] rangeOfString: [cardButton.currentAttributedTitle string]];
-        
-        // NSLog(@"currentAttributedTitle %@", [cardButton.currentAttributedTitle string]);
-        NSLog(@"textRange.location %i", textRange.location);
-        NSLog(@"textRange.length %i", textRange.length);
-        
-        NSMutableAttributedString *colorCard = [cardButton.currentAttributedTitle mutableCopy];
-        
-        NSLog(@"colorCard %@", [colorCard string]);
-        [colorCard addAttributes:cardTextAttributes range:textRange];
-        
-        [colorCard replaceCharactersInRange:textRange withString:cardContents];
-        
-        // setAttributedTitle:forState:
-        [cardButton setAttributedTitle:colorCard forState:UIControlStateNormal];
-        [cardButton setAttributedTitle:colorCard forState:UIControlStateSelected];
-        [cardButton setAttributedTitle:colorCard forState:UIControlStateSelected | UIControlStateDisabled];
+            
+        self.resultsLabel.alpha = 1;    
     }
+    
+    
+    else
+    {
+        NSMutableAttributedString *bob = [[NSMutableAttributedString alloc] initWithString:@"Results"];
+        self.resultsLabel.attributedText = [bob mutableCopy];
+        
+        NSLog(@" * else statement: %@", [bob string]);
+        
+        // --- setting font and size --------------------------------------------------------
+        /*
+            UIFont *font = [UIFont fontWithName:@"Palatino-Roman" size:14.0];
+            NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font
+                                                                        forKey:NSFontAttributeName];
+            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:@"strigil" attributes:attrsDictionary];
+        
+        
+        self.resultsLabel.attributedText = attrString;
+        NSLog(@" * s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
+        */
+        // -----------------------------------------------------------------------------------
+        
+    }
+    
+    
 }
 
 // Purely UI features can update themselves directly in their own setter
@@ -131,8 +273,10 @@
 
 - (IBAction)flipCard:(UIButton *)sender
 {
-    // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
+    [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
     self.flipCount++;
+    
+    // self.resultsLabel.attributedText = self.game.results;
     
     /*
      
@@ -149,57 +293,15 @@
     // self.gameResult.score = self.game.score;
 }
 
-/* Serious Issues
-
-// The method to update the UI
-// Objective 1: Make the UI look like the model
-// Objective 2: Inform the model of changes to the UI
-- (void)updateUI
+- (IBAction)dealCards:(UIButton *)sender
 {
-    // Create a variable for card backs
-    UIImage *cardBackImage = [UIImage imageNamed:@"cardshading.png"];
-    
-    // Go through all your buttons and update all your cards
-    for (UIButton *cardButton in self.cardButtons)
-    {
-        // Get a card from
-        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
-        
-        // Setting all of the card's features
-        
-        // Set card value
-        [cardButton setTitle:card.contents forState: UIControlStateNormal | UIControlStateSelected | UIControlStateDisabled];
-        
-        // Make sure correct state is selected
-        cardButton.selected = card.isFaceUp;
-        
-        // Make sure the enbled state is correct
-        cardButton.enabled = !card.isUnplayable;
-        
-        // Ghost cards if matched to 30%
-        cardButton.alpha = (card.isUnplayable ? 0.3 : 1.0);
-        
-        // Display the card back if the card is face down
-        if (!card.isFaceUp)
-        {
-            [cardButton setImage:nil forState:UIControlStateNormal];
-        }
-        
-        else
-        {
-            [cardButton setImage:cardBackImage forState:UIControlStateNormal];
-        }
-    }
-
-    // Update score on UI
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
- 
-    // Update results on UI
-    self.resultsLabel.alpha = 1;
-    self.resultsLabel.text = self.game.results;
-
+    self.game = nil;
+    self.flipCount = 0; // reset flipCount
+    self.history = nil;
+    self.resultsLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:@"Results"];
+    // self.gameResult =nil;
+    [self updateUI]; // get all cards face up
 }
- 
- */
+
 
 @end

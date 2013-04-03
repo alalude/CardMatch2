@@ -139,6 +139,8 @@
 		E36F356716E0244100FB92F9 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E3E7E3F71705298100B5BB31 /* SetCardMatchingGame.h */,
+				E3E7E3F81705298100B5BB31 /* SetCardMatchingGame.m */,
 				E36F356F16E0244100FB92F9 /* CardGameAppDelegate.h */,
 				E36F357016E0244100FB92F9 /* CardGameAppDelegate.m */,
 				E36F356816E0244100FB92F9 /* CardMatch-Info.plist */,
@@ -178,8 +180,6 @@
 				E3E7E3F117037E1B00B5BB31 /* SetCard.m */,
 				E3E7E3F41703CAC200B5BB31 /* SetCardDeck.h */,
 				E3E7E3F51703CAC200B5BB31 /* SetCardDeck.m */,
-				E3E7E3F71705298100B5BB31 /* SetCardMatchingGame.h */,
-				E3E7E3F81705298100B5BB31 /* SetCardMatchingGame.m */,
 			);
 			name = SetModel;
 			sourceTree = "<group>";

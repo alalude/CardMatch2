@@ -52,21 +52,23 @@
     BOOL colorSet = NO;
     BOOL shadeSet = NO;
     
-    NSDictionary  *otherCardsDic;
+    NSMutableDictionary  *otherCardsDic = [[NSMutableDictionary alloc] init];
     NSDictionary  *firstCard;
     NSDictionary  *secondCard;
     
     if ([otherCards count] > 1)
     {        
+        // Put received array into dictionary
         for (SetCard *otherCard in otherCards)
         {
-            otherCardsDic = @{@(dicID) : otherCard.rawContents};
-            dicID++;
+            [otherCardsDic setObject:otherCard.rawContents forKey: @(dicID)];
+            dicID++;            
         }
-    
+        
         // Two Cards for Comparison
         firstCard = [otherCardsDic objectForKey: @(0)];
         secondCard = [otherCardsDic objectForKey: @(1)];
+        
         
         // All Three Cards' Charachteristics
         
@@ -84,6 +86,7 @@
         NSInteger secondRank = [[secondCard objectForKey: @"rank"] intValue];
         UIColor *secondColor = [secondCard objectForKey: @"color"];
         CGFloat secondShade = [[secondCard objectForKey: @"shade"] floatValue];
+        
         
         // Rule Format
         // if ((x = y && y = z && z = x) || (x != y && y != z && z != x))
@@ -112,6 +115,56 @@
         {score = 1;}
         
         else { score = 0; }
+        
+        NSLog(@" - mainSuit %@", mainSuit);
+        NSLog(@" - firstSuit %@", firstSuit);
+        NSLog(@" - secondSuit %@", secondSuit);
+        if (suitSet)
+        {
+            NSLog(@" - MATCH yes");
+        }
+        else
+        {
+            NSLog(@" - MATCH no");
+        }
+        
+        NSLog(@" + mainRank %d", mainRank);
+        NSLog(@" + firstRank %d", firstRank);
+        NSLog(@" + secondRank %d", secondRank);
+        if (rankSet)
+        {
+            NSLog(@" + MATCH yes");
+        }
+        else
+        {
+            NSLog(@" + MATCH no");
+        }
+        
+        NSLog(@" * mainColor %@", mainColor);
+        NSLog(@" * firstColor %@", firstColor);
+        NSLog(@" * secondColor %@", secondColor);
+        if (colorSet)
+        {
+            NSLog(@" * MATCH yes");
+        }
+        else
+        {
+            NSLog(@" * MATCH no");
+        }
+        
+        NSLog(@" ^ mainShade %f", mainShade);
+        NSLog(@" ^ firstShade %f", firstShade);
+        NSLog(@" ^ secondShade %f", secondShade);
+        if (shadeSet)
+        {
+            NSLog(@" ^ MATCH yes");
+        }
+        else
+        {
+            NSLog(@" ^ MATCH no");
+        }
+        
+        
     }
     
     return score;
@@ -159,136 +212,46 @@
 //-----------------------------------------------------------------
 
 // Grabs the attributed text of a card
-- (id)contents
+- (NSMutableAttributedString *)contents
 {
-    /*
-     - (void)addTextAttributes:(NSDictionary *)attributes range:(NSRange) range
-     {
-     }
-     */
+   NSString *suitAppendage = @"";
     
-    /*
-     - (NSString *)contents
-     {
-     NSArray *rankString = [PlayingCard rankStrings];
-     return [rankString[self.rank] stringByAppendingString:self.suit];
-     }
-     */
-    
-    // initWithObjects:forKeys:
-    
-    
-    /*
-     
-     
-     
-     if ([otherCards count] > 1)
-     {
-     for (SetCard *otherCard in otherCards)
-     {
-     otherCardsDic = @{@(dicID) : otherCard.rawContents};
-     dicID++;
-     }
-     */
-    NSDictionary  *contentPlusAttirbutes;
-    
+    // Grab card's traits
     NSString *cardSuit = [self.rawContents objectForKey: @"suit"];
     NSInteger cardRank = [[self.rawContents objectForKey: @"rank"] intValue];
     UIColor *cardColor = [self.rawContents objectForKey: @"color"];
     CGFloat cardShade = [[self.rawContents objectForKey: @"shade"] floatValue];
     
-    NSString *suitAppendage = @"";
-    
+    // TEXT: Synthesize type and number of shapes on a card
     for (NSUInteger loopCount = cardRank; loopCount > 1; loopCount--)
     {
         suitAppendage = [suitAppendage stringByAppendingString: cardSuit];
-    }    
+    }
     
     cardSuit = [cardSuit stringByAppendingString: suitAppendage];
     
     
+    NSMutableAttributedString *fullContents = [[NSMutableAttributedString alloc] initWithString: cardSuit];
     
+    NSRange textRange = [[fullContents string] rangeOfString: [fullContents string]];
+    [fullContents replaceCharactersInRange:textRange withString:cardSuit];
+    
+    // NSLog(@"fullContents string %@", [fullContents string]);
+    // NSLog(@"textRange.location %i", textRange.location);
+    // NSLog(@"textRange.length %i", textRange.length);
     
     NSDictionary *cardTextAttributes = @{NSForegroundColorAttributeName : [cardColor colorWithAlphaComponent: cardShade],
-                                             NSStrokeWidthAttributeName : @-3,
-                                             NSStrokeColorAttributeName : cardColor};
+                                         NSStrokeWidthAttributeName : @-3,
+                                         NSStrokeColorAttributeName : cardColor};
     
+    [fullContents addAttributes:cardTextAttributes range:textRange];
     
-    contentPlusAttirbutes = @{@"contents" : cardSuit, @"attributes" : cardTextAttributes};
+    //NSLog(@"in contents method fullContents %@", fullContents);
+   
     
-    
-    
-    
-    
-    NSRange textRange = [cardSuit rangeOfString: cardSuit];
-    // NSLog(@"textRange.length %i", textRange.length);
-    // NSLog(@"textRange.location %i", textRange.location);
-
-    
-    if (textRange.location != NSNotFound)
-    {
-        // - (void)replaceCharactersInRange:(NSRange)aRange withString:(NSString *)aString
-    
-        /*
-        // Get a mutable version of the string to work with
-        NSMutableAttributedString *mat = [self.label.attributedText mutableCopy];
-        
-        // Add attributes to the range of text
-        [mat addAttributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)}
-                     range:range];
-        
-        // Update the attributed text
-        self.label.attributedText = mat;
-         */
-        
-        
-/*
-        
-        
-         NSMutableAttributedString *mat;
-         // mat = [[NSMutableAttributedString alloc] init];
-        mat = self.
-        [mat replaceCharactersInRange:textRange withString:cardSuit];
-        
-        
-        
-        
-        
-        
-        //= [cardSuit mutableCopy];
-        
-        //[mat addAttributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)} range:textRange];
-        
-        cardSuit = [mat copy];
-        
-*/
-        
-        
-        /*
-        NSMutableAttributedString *cardText = [cardSuit mutableCopy];
-    
-
-        // NSDictionary *cardTextAttributes = @{NSForegroundColorAttributeName : [cardColor colorWithAlphaComponent: cardShade],
-        //                                         NSStrokeWidthAttributeName : @-3,
-        //                                         NSStrokeColorAttributeName : cardColor};
-        
-        // [cardText addAttributes:cardTextAttributes range: textRange];
-        // [cardText addAttributes:@{NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle)} range: textRange];
-        
-        cardSuit = cardText;
-        NSLog(@"cardText %@", cardText);
-        */
-    }
-    
-    /*
-    
-     return [cardText copy]; // converting it back to nsstring
-    */
-    
-    
-    
-    return contentPlusAttirbutes;
+    return fullContents;
 }
+
 
 //-----------------------------------------------------------------
 // Setters and getters
