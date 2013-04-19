@@ -30,6 +30,7 @@
 
 // readonly = only has a getter
 @property (readonly, nonatomic) int score;
+@property (strong, nonatomic) NSString *gameType;                                                    // *!*
 
 // Results for Display
 // readonly = only has a getter

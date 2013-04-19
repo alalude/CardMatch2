@@ -44,8 +44,10 @@
         // This is because we want to be able to write setters and getters
         // where we can assume their objects are fully initialized
         
-         _start = [NSDate date]; // date is a method that returns the date/time at the momentit's called
+        _start = [NSDate date]; // date is a method that returns the date/time at the momentit's called        
         _end = _start;
+        
+        _gameType = @"XXX Matching";                                                                                      // *!*
     }
     
     return self;
@@ -56,7 +58,8 @@
 
 #define START_KEY @"StartDate"
 #define END_KEY @"EndDate"
-#define SCORE_KEY @"Score"
+#define SCORE_KEY @"Score"                                                    
+#define GAME_TYPE_KEY @"GameType"                                                                                          // *!*
 
 + (NSArray *)allGameResults
 {
@@ -82,7 +85,7 @@
     // Look in plist and set start, end, and score
     if (self)
     {
-        // confirm tht you've been passed a dictionary
+        // confirm that you've been passed a dictionary
         if ([plist isKindOfClass:[NSDictionary class]])
         {
             // create a local dictionary
@@ -90,6 +93,9 @@
             _start = resultDictionary[START_KEY];
             _end = resultDictionary[END_KEY];
             _score = [resultDictionary[SCORE_KEY] intValue]; // this must be turned back into an int because it's been stored as an NSNumber
+            
+            NSLog(@"GameResults.m, data from initFromPropertyList: %@", resultDictionary[GAME_TYPE_KEY]);
+            _gameType = resultDictionary[GAME_TYPE_KEY];                                                                   // *!*
             
             // a little saftey check
             if (!_start || !_end) self = nil;
@@ -111,6 +117,8 @@
     _score = score;
     // _end = [NSDate date]; shouldn't access another propety's "_"
     self.end = [NSDate date];
+    
+    // Called every time the score changes
     [self synchronize]; //record the score
 }
 
@@ -122,17 +130,20 @@
 - (void)synchronize
 {
     // Game results will be stored in a dictionary
-    // The key for the dictionary will be a quniqe identifier, the time the game started
+    // The key for the dictionary will be a uniqe identifier, the time the game started
     // The value will be a property list that can be used to recreate the game result, another dictionary
     NSMutableDictionary *mutableGameResultsFromUserDefaults = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:ALL_RESULTS_KEY] mutableCopy]; // have to say mutable copy because things come out immutable even if they go in mutable
     
+    // Clear my existing scores
     // if there isn't allready a dictionary saved from previous play, initailize one now
     if(!mutableGameResultsFromUserDefaults) mutableGameResultsFromUserDefaults = [[NSMutableDictionary alloc] init];
+      //if(mutableGameResultsFromUserDefaults) mutableGameResultsFromUserDefaults = [[NSMutableDictionary alloc] init];
     
     // set the unique key
     // NSDates can't be keys in an NSDictionary, but strings can
     // So leverage description to get the start time as string
     mutableGameResultsFromUserDefaults[[self.start description]] = [self asPropertyList];
+    // asPropertyList - turns result into property list, so that it can go into NSUserDefaults
     
     // Now put it back in NSUserDefaults
     [[NSUserDefaults standardUserDefaults] setObject:mutableGameResultsFromUserDefaults forKey:ALL_RESULTS_KEY];
@@ -142,15 +153,16 @@
 - (id)asPropertyList
 {
      // return a dictionary
-    return @{START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score)};
+    //return @{START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score)};
+    return @{START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score), GAME_TYPE_KEY : self.gameType};       // *!*
 }
 
 int i = 1;
 
 - (NSComparisonResult)compareDate:(GameResult *)aGameResult
 {
-    NSLog(@"Compared for Date");
-    NSLog(@"Date %@ (%d)", self.end, i);
+    //NSLog(@"Compared for Date");
+    //NSLog(@"Date %@ (%d)", self.end, i);
     i++;
     
     return ([self.end compare:aGameResult.end]);
@@ -158,8 +170,8 @@ int i = 1;
 
 - (NSComparisonResult)compareScore:(GameResult *)aGameResult
 {
-    NSLog(@"Compared for Score");
-    NSLog(@"Score %d (%d)", self.score, i);
+    //NSLog(@"Compared for Score");
+    //NSLog(@"Score %d (%d)", self.score, i);
     i++;
     
     return ([@(self.score) compare:@(aGameResult.score)]);
@@ -167,12 +179,23 @@ int i = 1;
 
 - (NSComparisonResult)compareDuration:(GameResult *)aGameResult
 {
-    NSLog(@"Compared for Duration");
-    NSLog(@"Duration %0g (%d)", self.duration, i);
+    //NSLog(@"Compared for Duration");
+    //NSLog(@"Duration %0g (%d)", self.duration, i);
     i++;
     
     return ([@(self.duration) compare:@(aGameResult.duration)]);
 }
+
+//------------------------------------------------------------------------------
+- (NSComparisonResult)compareGameType:(GameResult *)aGameResult
+{
+    //NSLog(@"Compared for Duration");
+    //NSLog(@"Duration %0g (%d)", self.duration, i);
+    i++;
+    
+    return ([self.gameType compare:aGameResult.gameType]);
+}
+
 
 @end
 

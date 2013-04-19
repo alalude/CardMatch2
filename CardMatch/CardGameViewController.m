@@ -10,6 +10,7 @@
 #import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
 #import "GameResult.h"
+#import "GameSettings.h"
 
 @interface CardGameViewController ()
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
@@ -34,10 +35,33 @@
 
 @property (strong, nonatomic) GameResult *gameResult;
 
+    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+    // @property (strong, nonatomic) NSMutableDictionary *allSettings;
+    // @property (strong, nonatomic) NSMutableDictionary *currentSettings;
+
 @end
 
 
 @implementation CardGameViewController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+        // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+        //self.allSettings = [Setting allSettings];
+    
+    [self updateUI];
+}
+
+/*
+ - (void)viewWillAppear:(BOOL)animated
+ {
+ [super viewWillAppear:animated];
+ self.allGameResults = [GameResult allGameResults];
+ [self updateUI];
+ }
+ */
 
 // Lazy instantiation for the model
 - (CardMatchingGame *)game
@@ -48,6 +72,7 @@
                                                   usingDeck:[[PlayingCardDeck alloc] init]];
         [self gameModeChange:self.gameModeSelector];
     }
+    
     return _game;
 }
 
@@ -80,14 +105,30 @@
     [self updateUI];
 }
 
+// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+/*
+- (void)setCardBack:(UIImage *)cardBack
+{
+    _cardBack = cardBack;
+    
+    [self updateUI];
+}
+ */
+
+
 // The method to update the UI
 // Objective 1: Make the UI look like the model
 // Objective 2: Inform the model of changes to the UI
 - (void)updateUI
 {
+    
+    
     // Create a variable for card backs
-    UIImage *cardBackImage = [UIImage imageNamed:@"cardback.png"];
-    // UIControlState *currentState = nil;                                 *!* gave warning for ages
+    //UIImage *cardBackImage = [UIImage imageNamed: self.cardBack];
+    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+    // UIImage *cardBackImage = self.cardBack;
+    
+    
     
     // Go through all your buttons and update all your cards
     for (UIButton *cardButton in self.cardButtons)
@@ -117,7 +158,31 @@
         // Display the card back if the card is face down
         if (!card.isFaceUp)
         {
-            [cardButton setImage:cardBackImage forState:UIControlStateNormal];            
+            NSLog(@"cardView cardback %@", [self.settingsDicReceiver objectForKey: @"cardback"]);
+            
+            if ([self.settingsDicReceiver objectForKey: @"cardback"])
+            {
+                // UIImage *chosenCardback = [self.settingsDicReceiver objectForKey: @"cardback"];                
+                // [cardButton setImage: chosenCardback forState:UIControlStateNormal];
+                
+                [cardButton setImage: [self.settingsDicReceiver objectForKey: @"cardback"] forState:UIControlStateNormal];
+            }
+            
+            else
+            {
+                [cardButton setImage: [UIImage imageNamed: @"cardBackDefault.png"] forState:UIControlStateNormal];
+            }
+            
+            
+            
+            // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+            //self.allSettings = [GameSettings allSettings];
+            // self.currentSettings = [GameSettings allSettings]; //settingsDic
+            // self.currentSettings = [GameSettings.settingsDic]; //settingsDic
+            
+            
+            // [cardButton setImage: [UIImage imageNamed: @"cardBackStripes.png"] forState:UIControlStateNormal];
+            // [cardButton setImage: card.cardBack forState:UIControlStateNormal];
         }
         
         else
@@ -168,7 +233,11 @@
     
     // Each time a card is flipped the UI needs to be updated
     [self updateUI];
+    
+    
     self.gameResult.score = self.game.score;
+    
+    self.gameResult.gameType = self.game.gameType;
 }
 
 - (IBAction)historySliderChanged:(UISlider *)sender
@@ -184,7 +253,6 @@
         self.resultsLabel.text = [self.history objectAtIndex:sliderValue];
     }
 }
-
 
 - (IBAction)dealCards:(UIButton *)sender
 {
@@ -216,5 +284,6 @@
             break;
     }
 }
+
 
 @end

@@ -116,54 +116,31 @@
         
         else { score = 0; }
         
+        /*
         NSLog(@" - mainSuit %@", mainSuit);
         NSLog(@" - firstSuit %@", firstSuit);
         NSLog(@" - secondSuit %@", secondSuit);
-        if (suitSet)
-        {
-            NSLog(@" - MATCH yes");
-        }
-        else
-        {
-            NSLog(@" - MATCH no");
-        }
+        if (suitSet) NSLog(@" - MATCH yes");
+        else NSLog(@" - MATCH no");
         
         NSLog(@" + mainRank %d", mainRank);
         NSLog(@" + firstRank %d", firstRank);
         NSLog(@" + secondRank %d", secondRank);
-        if (rankSet)
-        {
-            NSLog(@" + MATCH yes");
-        }
-        else
-        {
-            NSLog(@" + MATCH no");
-        }
+        if (rankSet) NSLog(@" + MATCH yes");
+        else NSLog(@" + MATCH no");
         
         NSLog(@" * mainColor %@", mainColor);
         NSLog(@" * firstColor %@", firstColor);
         NSLog(@" * secondColor %@", secondColor);
-        if (colorSet)
-        {
-            NSLog(@" * MATCH yes");
-        }
-        else
-        {
-            NSLog(@" * MATCH no");
-        }
+        if (colorSet) NSLog(@" * MATCH yes");
+        else NSLog(@" * MATCH no");
         
         NSLog(@" ^ mainShade %f", mainShade);
         NSLog(@" ^ firstShade %f", firstShade);
         NSLog(@" ^ secondShade %f", secondShade);
-        if (shadeSet)
-        {
-            NSLog(@" ^ MATCH yes");
-        }
-        else
-        {
-            NSLog(@" ^ MATCH no");
-        }
-        
+        if (shadeSet) NSLog(@" ^ MATCH yes");
+        else NSLog(@" ^ MATCH no");
+         */
         
     }
     

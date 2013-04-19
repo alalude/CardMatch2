@@ -34,6 +34,23 @@
     return score;
 }
 
+    /*
+     // Lazy instantiation
+    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+    - (UIImage *)cardBack
+    {
+        if (!_cardBack) _cardBack = [UIImage imageNamed: @"cardBackStripes.png"];
+        return _cardBack;
+    }
+
+    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+    // Default cardBack
+    // self.cardBack = [UIImage imageNamed: @"cardBackAbstract.png"] ;
+
+    // gotta init this some place, its a member of card
+     */
+
 
 @end
 

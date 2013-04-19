@@ -14,4 +14,7 @@
 
 @interface CardGameViewController : UIViewController
 
+    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+    @property (strong, nonatomic) NSMutableDictionary  *settingsDicReceiver;
+
 @end

@@ -38,7 +38,7 @@
 
 // xxx IBOutlet UISlider *historySlider;
 
-// @property (strong, nonatomic) GameResult *gameResult;
+@property (strong, nonatomic) GameResult *gameResult;
 
 @end
 
@@ -63,8 +63,8 @@
         // If a font is found take font size by itself
         if (existingFont) fontSize = existingFont.pointSize;  // font size from label
         
-        NSLog(@" ~ s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
-        NSLog(@" ~ existingFont.pointSize %f", existingFont.pointSize);
+        // NSLog(@" ~ s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
+        // NSLog(@" ~ existingFont.pointSize %f", existingFont.pointSize);
         
         // -----------------------------------------------------------------------------------
     
@@ -81,6 +81,12 @@
         // [self gameModeChange:self.gameModeSelector];
     }
     return _game;
+}
+
+- (GameResult *)gameResult
+{
+    if (!_gameResult) _gameResult = [[GameResult alloc] init];
+    return _gameResult;
 }
 
 - (NSMutableArray *)history
@@ -125,7 +131,7 @@
         // Make sure the enbled state is correct
         cardButton.enabled = !card.isUnplayable;
         
-        // Ghost cards if matched to 30%
+        // Ghost cards if matched to .05%
         cardButton.alpha = (card.isUnplayable ? 0.05 : 1.0);
         
         // Display the card back if the card is face down
@@ -143,123 +149,88 @@
     // Update score on UI
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     
-    // Update results on UI
-    if (self.resultsLabel.attributedText)
-    {    
+    // --- get font size from resultsLabel -----------------------------------------------
+    
+        // Initialize fontSize
+        CGFloat fontSize = [UIFont systemFontSize];
+
+        // Must ask for current font size because font and size are package together,
+        // but we only want to grab font from the button
+        NSDictionary *attributes = [self.resultsLabel.attributedText attributesAtIndex:0 effectiveRange:NULL];
+        
+        // Looking up in the dictionary what the font is
+        UIFont *existingFont = attributes[NSFontAttributeName];
+        
+        // If a font is found take font size by itself
+        if (existingFont) fontSize = existingFont.pointSize;  // font size from label
+        
+        //NSLog(@"self.resultsLabel.attributedText: %@", [self.resultsLabel.attributedText string]);
+        //NSLog(@"existingFont.pointSize %f", existingFont.pointSize);
+        
+    // -----------------------------------------------------------------------------------
+    
+    // update results
+    
+    //NSLog(@" A s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
+    //NSLog(@" B existingFont.pointSize %f", existingFont.pointSize);
+    
+    if (self.game.results) self.resultsLabel.attributedText = self.game.results;
+    
+    //---
+        //NSLog(@" C s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
+
         // --- get font size from resultsLabel -----------------------------------------------
         
-            // Initialize fontSize
-            CGFloat fontSize = [UIFont systemFontSize];
-
-            // Must ask for current font size because font and size are package together,
-            // but we only want to grab font from the button
-            NSDictionary *attributes = [self.resultsLabel.attributedText attributesAtIndex:0 effectiveRange:NULL];
-            
-            // Looking up in the dictionary what the font is
-            UIFont *existingFont = attributes[NSFontAttributeName];
-            
-            // If a font is found take font size by itself
-            if (existingFont) fontSize = existingFont.pointSize;  // font size from label
-            
-            NSLog(@"self.resultsLabel.attributedText: %@", [self.resultsLabel.attributedText string]);
-            NSLog(@"existingFont.pointSize %f", existingFont.pointSize);
-            
-        // -----------------------------------------------------------------------------------
-        
-        // update results
-        
-        NSLog(@" A s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
-        NSLog(@" B existingFont.pointSize %f", existingFont.pointSize);
-        
-        if (self.game.results) self.resultsLabel.attributedText = self.game.results;
-        
-        //---
-            NSLog(@" C s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
-
-            // --- get font size from resultsLabel -----------------------------------------------
-            
-                attributes = [self.resultsLabel.attributedText attributesAtIndex:0 effectiveRange:NULL];
-                existingFont = attributes[NSFontAttributeName];
-                if (existingFont) fontSize = existingFont.pointSize;  // font size from label
-                NSLog(@" D existingFont.pointSize %f", existingFont.pointSize);
-
-            // -----------------------------------------------------------------------------------
-        //---
-        
-        
-        // --- add attribute to range --------------------------------------------------------
-        
-            NSRange range = [[self.resultsLabel.attributedText string] rangeOfString:[self.resultsLabel.attributedText string]];
-            
-            // Assuming the range has been found
-            if (range.location != NSNotFound)
-            {
-                // Get a mutable version of the string to work with
-                NSMutableAttributedString *mat = [self.resultsLabel.attributedText mutableCopy];
-                
-                // Add attributes to the range of text
-                [mat addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:range];
-                
-                // Update the attributed text
-                self.resultsLabel.attributedText = mat;
-            }
-        
-        // -----------------------------------------------------------------------------------
-        
-        //---
-            NSLog(@" E s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
-            
-            // --- get font size from resultsLabel -----------------------------------------------
-            
             attributes = [self.resultsLabel.attributedText attributesAtIndex:0 effectiveRange:NULL];
             existingFont = attributes[NSFontAttributeName];
             if (existingFont) fontSize = existingFont.pointSize;  // font size from label
-            NSLog(@" F existingFont.pointSize %f", existingFont.pointSize);
-            
-            // -----------------------------------------------------------------------------------
-        //---
-        
-        
-        /*
-        //Set font with font from button and size from label
-        UIFont *font = [sender.titleLabel.font fontWithSize:fontSize];
-        
-        // Update label
-        [self addSelectedWordAttributes:@{NSFontAttributeName : font}];
-        
-        
-        
-        
-        addAttributes:range:
-        
-        */
-            
-        self.resultsLabel.alpha = 1;    
-    }
-    
-    
-    else
-    {
-        NSMutableAttributedString *bob = [[NSMutableAttributedString alloc] initWithString:@"Results"];
-        self.resultsLabel.attributedText = [bob mutableCopy];
-        
-        NSLog(@" * else statement: %@", [bob string]);
-        
-        // --- setting font and size --------------------------------------------------------
-        /*
-            UIFont *font = [UIFont fontWithName:@"Palatino-Roman" size:14.0];
-            NSDictionary *attrsDictionary = [NSDictionary dictionaryWithObject:font
-                                                                        forKey:NSFontAttributeName];
-            NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:@"strigil" attributes:attrsDictionary];
-        
-        
-        self.resultsLabel.attributedText = attrString;
-        NSLog(@" * s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
-        */
+            //NSLog(@" D existingFont.pointSize %f", existingFont.pointSize);
+
         // -----------------------------------------------------------------------------------
-        
-    }
+    //---
     
+    
+    // --- add attribute to range --------------------------------------------------------
+    
+        // Get Range
+        NSRange range = [[self.resultsLabel.attributedText string] rangeOfString:[self.resultsLabel.attributedText string]];
+    
+        // Center Text Variable
+        NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragrahStyle setAlignment: NSTextAlignmentCenter];
+    
+        // Assuming the range has been found
+        if (range.location != NSNotFound)
+        {
+            // Get a mutable version of the string to work with
+            NSMutableAttributedString *resultsLabelAttrText = [self.resultsLabel.attributedText mutableCopy];
+            
+            // Add attributes to the range of text
+            [resultsLabelAttrText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:12] range:range];
+            
+            // Center text
+            [resultsLabelAttrText addAttribute:NSParagraphStyleAttributeName value:paragrahStyle range:range];
+            
+            // Update the attributed text
+            self.resultsLabel.attributedText = resultsLabelAttrText;
+        }
+    
+    // -----------------------------------------------------------------------------------
+    
+    //---
+        //NSLog(@" E s.resultsLabel.attrText: %@", [self.resultsLabel.attributedText string]);
+        
+        // --- get font size from resultsLabel -----------------------------------------------
+        
+        attributes = [self.resultsLabel.attributedText attributesAtIndex:0 effectiveRange:NULL];
+        existingFont = attributes[NSFontAttributeName];
+        if (existingFont) fontSize = existingFont.pointSize;  // font size from label
+        //NSLog(@" F existingFont.pointSize %f", existingFont.pointSize);
+        
+        // -----------------------------------------------------------------------------------
+    //---
+        
+    self.resultsLabel.alpha = 1;    
     
 }
 
@@ -290,7 +261,9 @@
     
     // Each time a card is flipped the UI needs to be updated
     [self updateUI];
-    // self.gameResult.score = self.game.score;
+    self.gameResult.score = self.game.score;
+    self.gameResult.gameType = self.game.gameType;                                                                          // *!*
+    
 }
 
 - (IBAction)dealCards:(UIButton *)sender
@@ -299,8 +272,8 @@
     self.flipCount = 0; // reset flipCount
     self.history = nil;
     self.resultsLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:@"Results"];
-    // self.gameResult =nil;
-    [self updateUI]; // get all cards face up
+    self.gameResult = nil;                                                                                                   // *!*
+    [self updateUI]; // get all cards face up    
 }
 
 

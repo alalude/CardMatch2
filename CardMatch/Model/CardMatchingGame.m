@@ -61,11 +61,12 @@
  
  */
 
+
 #define MATCH_BONUS 4
 #define MISMATCH_PENALTY 2
 #define FLIP_COST 1
 
-- (void)flipCardAtIndex:(NSUInteger)index            // --- Start the War Here --- //
+- (void)flipCardAtIndex:(NSUInteger)index
 {
     //Disable game mode selector
     self.activeModeControl = NO;
@@ -80,11 +81,11 @@
     // self.deckIndex = index;
     //NSLog(@"self.deckIndex %d", self.deckIndex);
     
-    if ([card.contents isKindOfClass: [NSAttributedString class]])                                           // card.contents //
+    if ([card.contents isKindOfClass: [NSAttributedString class]])
     {
         NSLog(@"NSAttributedString card.contents %@", [card.contents string]);
     }
-    else if ([card.contents isKindOfClass: [NSAttributedString class]])                                           // card.contents //
+    else if ([card.contents isKindOfClass: [NSAttributedString class]])
     {
         NSLog(@"NSMutableAttributedString card.contents %@", [card.contents string]);
     }
@@ -104,11 +105,14 @@
         if ([card.contents isKindOfClass: [NSAttributedString class]])
         {
             self.results = [[NSMutableAttributedString alloc] initWithString:@"Results"];
-            NSLog(@"self.results init %@", [self.results string]);
+            self.gameType = @"Set Matching";                                                                    // *!*
+            NSLog(@"CMG.m gameType %@", self.gameType);
         }
         else
         {
-            self.results = (@"Results");                                                                        // *!*
+            self.results = (@"Results");    
+            self.gameType = @"Card Matching";                                                                   // *!*
+            NSLog(@"CMG.m gameType %@", self.gameType);
         }
         
         
@@ -131,6 +135,8 @@
             }
             
             
+            
+            
             if ([card.contents isKindOfClass: [NSAttributedString class]])
             {
                 // NSDictionary  *otherCardsDic = [[NSDictionary alloc] init];
@@ -143,7 +149,7 @@
                     //otherCardsDic = @{@(dicID) : otherCard.contents};
                     [otherCardsDic setObject:otherCard.contents forKey: @(dicID)];
                     
-                    NSLog(@"dicID %i, entry %@", dicID, [otherCard.contents string]);
+                    // NSLog(@"dicID %i, entry %@", dicID, [otherCard.contents string]);
                     dicID++;
                     
                 }
@@ -155,8 +161,10 @@
                 
                 // Static text for resultsLabel
                 NSMutableAttributedString *ampersand = [[NSMutableAttributedString alloc] initWithString:@" & "];
-                NSMutableAttributedString *areASet = [[NSMutableAttributedString alloc] initWithString:@" are a set"];
-                NSMutableAttributedString *arentASet = [[NSMutableAttributedString alloc] initWithString:@" aren't a set"];
+                NSMutableAttributedString *areASet = [[NSMutableAttributedString alloc] initWithString:@" are a set worth "];
+                NSMutableAttributedString *arentASet = [[NSMutableAttributedString alloc] initWithString:@" aren't a set, "];
+                NSMutableAttributedString *rewardEnding = [[NSMutableAttributedString alloc] initWithString:@" points"];
+                NSMutableAttributedString *penaltyEnding = [[NSMutableAttributedString alloc] initWithString:@" point penalty"];
                 
                 NSRange textRange = [[self.results string] rangeOfString: [self.results string]];
             
@@ -185,11 +193,13 @@
                             otherCard.unplayable = YES;
                         }
                         
+                        NSString *reward = [NSString stringWithFormat: @"%d", (matchScore * MATCH_BONUS * MATCH_BONUS)];
+                        NSMutableAttributedString *pointsEarned = [[NSMutableAttributedString alloc] initWithString: reward];
+                        NSLog(@"Score for set: %@", reward);
+                        
                         self.score += matchScore * MATCH_BONUS * MATCH_BONUS;
-                        NSLog(@"Score for set: %d", self.score);
                         
                         //self.results = [NSString stringWithFormat:@"Matched %@ & %@ for %d points", card.contents, [otherContents componentsJoinedByString:@" & "], matchScore * MATCH_BONUS];
-                        
                         
                         [self.results replaceCharactersInRange:textRange withString:@"Yes, "];
                         [self.results appendAttributedString: thirdCard];
@@ -198,8 +208,10 @@
                         [self.results appendAttributedString: ampersand];
                         [self.results appendAttributedString: mainCard];
                         [self.results appendAttributedString: areASet];
+                        [self.results appendAttributedString: pointsEarned];
+                        [self.results appendAttributedString: rewardEnding];
                         
-                        NSLog(@"3 form a match: %@", [self.results string]);
+                        // NSLog(@"3 form a match: %@", [self.results string]);
                         
                     }
                     
@@ -212,11 +224,13 @@
                             otherCard.faceUp = NO;
                         }
                         
+                        NSString *penalty = [NSString stringWithFormat: @"%d", MISMATCH_PENALTY];
+                        NSMutableAttributedString *pointsLost = [[NSMutableAttributedString alloc] initWithString: penalty];
+                        NSLog(@"Score for no set: %@", penalty);
+                        
                         self.score -= MISMATCH_PENALTY;
-                        NSLog(@"Score for no set: %d", self.score);
                         
                         // self.results = [NSString stringWithFormat:@"%@ & %@ don’t match! %d point penalty!", card.contents, [otherContents componentsJoinedByString:@" & "], MISMATCH_PENALTY];
-                        
                         
                         [self.results replaceCharactersInRange:textRange withString:@"No, "];
                         [self.results appendAttributedString: thirdCard];
@@ -225,14 +239,17 @@
                         [self.results appendAttributedString: ampersand];
                         [self.results appendAttributedString: mainCard];
                         [self.results appendAttributedString: arentASet];
+                        [self.results appendAttributedString: pointsLost];
+                        [self.results appendAttributedString: penaltyEnding];
                         
-                        NSLog(@"3 don't form a match: %@", [self.results string]);
+                        // NSLog(@"3 don't form a match: %@", [self.results string]);
                          
                     }
                     
                     
                 }
             }
+            
             
             
             
@@ -246,7 +263,7 @@
                 
                 else
                 {
-                    NSLog(@"flipCardAtIndex: 2+ cards flipped");
+                    // NSLog(@"flipCardAtIndex: 2+ cards flipped");
                     int matchScore = [card match:otherCards];
                     
                     if (matchScore)
@@ -277,8 +294,6 @@
                 }
              }
              
-            
-       
             
             self.score -= FLIP_COST;
         }

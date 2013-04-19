@@ -26,6 +26,9 @@
 
 @property (nonatomic) int score;
 
+//@property (nonatomic, getter = isSetGameType) BOOL setGameType;
+@property (strong, nonatomic) NSString *gameType;                                    // get rid of this? // *!*
+
 - (NSComparisonResult)compareDate:(GameResult *)aGameResult;
 - (NSComparisonResult)compareScore:(GameResult *)aGameResult;
 - (NSComparisonResult)compareDuration:(GameResult *)aGameResult;

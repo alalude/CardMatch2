@@ -10,6 +10,4 @@
 
 @interface SetGameViewController : UIViewController
 
-- (void)updateResults;
-
 @end
