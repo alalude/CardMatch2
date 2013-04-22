@@ -65,6 +65,7 @@
 #define MATCH_BONUS 4
 #define MISMATCH_PENALTY 2
 #define FLIP_COST 1
+#define RESULTS_LABEL_FONT_SIZE 12.0
 
 - (void)flipCardAtIndex:(NSUInteger)index
 {
@@ -73,29 +74,6 @@
     
     // First get the card at the designated index
     Card *card = [self cardAtIndex:index];
-    
-    
-    
-    // ---------------------------------------------------
-    /*
-    // self.deckIndex = index;
-    //NSLog(@"self.deckIndex %d", self.deckIndex);
-    
-    if ([card.contents isKindOfClass: [NSAttributedString class]])
-    {
-        NSLog(@"NSAttributedString card.contents %@", [card.contents string]);
-    }
-    else if ([card.contents isKindOfClass: [NSAttributedString class]])
-    {
-        NSLog(@"NSMutableAttributedString card.contents %@", [card.contents string]);
-    }
-    else
-    {
-        NSLog(@"Introspection failure %@", [card.contents string]);
-    }
-     */
-    // ---------------------------------------------------
-
     
    
     // Now confirm there's a card at the index and it is playable
@@ -106,7 +84,7 @@
         {
             self.results = [[NSMutableAttributedString alloc] initWithString:@"Results"];
             self.gameType = @"Set Matching";                                                                    // *!*
-            NSLog(@"CMG.m gameType %@", self.gameType);
+            NSLog(@"1) CMG.m gameType %@", self.gameType);
         }
         else
         {
@@ -120,6 +98,8 @@
         // To prevent comparing a card to itself
         if (!card.isFaceUp)
         {
+            NSLog(@"2) CMG.m card is not face up");
+            
             NSMutableArray *otherCards = [[NSMutableArray alloc] init];
             NSMutableArray *otherContents = [[NSMutableArray alloc] init];
             
@@ -135,10 +115,10 @@
             }
             
             
-            
-            
             if ([card.contents isKindOfClass: [NSAttributedString class]])
             {
+                NSLog(@"3) CMG.m card.contents isKindOfClass NSAttributedString");
+                
                 // NSDictionary  *otherCardsDic = [[NSDictionary alloc] init];
                 NSMutableDictionary  *otherCardsDic = [[NSMutableDictionary alloc] init];
                 
@@ -169,11 +149,12 @@
                 NSRange textRange = [[self.results string] rangeOfString: [self.results string]];
             
                 
-                // If only one card is fliped
+                // If only one card is flipped
                 if ([otherCards count] < 2)                                     // self.numberOfMatchingCards
                 {
                     // self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents];           // *!*
                     
+                    NSLog(@"4) CMG.m only one card flipped");
                     [self.results replaceCharactersInRange:textRange withString:@"Flipped up "];
                     [self.results appendAttributedString: mainCard];                    
                 }
@@ -246,6 +227,21 @@
                          
                     }
                     
+                    /*
+                    // Center and Set Font Size
+                    NSRange range = [[self.results string] rangeOfString:[self.results string]];
+                    NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
+                    [paragrahStyle setAlignment: NSTextAlignmentCenter];
+                    
+                    if (range.location != NSNotFound)
+                    {
+                        NSMutableAttributedString *resultsAttrText = [self.results mutableCopy];
+                        [resultsAttrText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:RESULTS_LABEL_FONT_SIZE] range:range];
+                        [resultsAttrText addAttribute:NSParagraphStyleAttributeName value:paragrahStyle range:range];
+                        
+                        self.results = resultsAttrText;
+                    }
+                     */
                     
                 }
             }

@@ -8,7 +8,6 @@
 
 #import "GameSettingsViewController.h"
 #import "CardGameViewController.h"
-#import "GameSettings.h"
 
 @interface GameSettingsViewController ()
 @property (strong, nonatomic) NSMutableDictionary *allSettings;
@@ -47,14 +46,6 @@
 
 - (IBAction)selectedCardBack:(UIButton *)sender
 {
-    /*self.allSettings = [GameSettings allSettings];
-    
-    NSLog(@"cardback before %@", [self.allSettings objectForKey: @"cardback"]);
-    [self.allSettings setObject: [sender imageForState: UIControlStateNormal] forKey: @"cardback"];
-    NSLog(@"cardback after %@", [self.allSettings objectForKey: @"cardback"]);
-    */
-    
-    
     NSLog(@"GameSetting cardback before %@", [self.settingsDic objectForKey: @"cardback"]);
     [self.settingsDic setObject: [sender imageForState: UIControlStateNormal] forKey: @"cardback"];
     NSLog(@"GameSetting cardback after %@", [self.settingsDic objectForKey: @"cardback"]);
@@ -62,12 +53,6 @@
     // prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
     [self performSegueWithIdentifier: @"passCardbacks" sender: self];
     
-    /*
-    // Card *card = [[Card alloc] init];
-    self.cardBack = [sender imageForState: UIControlStateNormal];
-    NSLog(@"cardback %@", self.cardBack);
-    [self synchronize];
-     */
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

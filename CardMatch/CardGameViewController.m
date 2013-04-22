@@ -7,17 +7,21 @@
 //
 
 #import "CardGameViewController.h"
-#import "PlayingCardDeck.h"
+// #import "PlayingCardDeck.h" // this class is being made generic
 #import "CardMatchingGame.h"
 #import "GameResult.h"
-#import "GameSettings.h"
+// #import "GameSettings.h"
 
-@interface CardGameViewController ()
+// we want our controller to provide data for the collection view
+// so we will tell the world that the CardGameViewController is willing to be a colection view data source
+@interface CardGameViewController () <UICollectionViewDataSource>
+
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (nonatomic) int flipCount;
 
+// UPGRADE
 // An array of the cards on screen
-@property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
+// @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 
 // Bringing in the game itself, a pointer to the model
 @property (strong, nonatomic) CardMatchingGame *game;
@@ -35,46 +39,83 @@
 
 @property (strong, nonatomic) GameResult *gameResult;
 
-    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-    // @property (strong, nonatomic) NSMutableDictionary *allSettings;
-    // @property (strong, nonatomic) NSMutableDictionary *currentSettings;
+@property (weak, nonatomic) IBOutlet UICollectionView *cardCollectionView;
+
+
 
 @end
 
 
 @implementation CardGameViewController
 
+
+//-----------------------------------------------------------------
+// Required Implementation for UICollectionViewDataSource Protocol
+//-----------------------------------------------------------------
+
+// optional example
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1; // returns 1 even if not implemented
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.startingCardCount; // *!* gonna want to ask how many cards are currently in play *!*
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    // make sure "PlayingCard" matches up with what s in the storyboard (reuse identifier)
+    // were talking about the cell not the view within it
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PlayingOrSetCard" forIndexPath:indexPath]; // PlayingOrSetCard has been set as the Reuse Identifier for both PlayingCardCollectionViewCell and PlayingCardCollectionViewCell
+    
+    // now that we have the cell let's load it up with that something from the model
+    // let's get that something from the model... the card
+    Card *card = [self.game cardAtIndex:indexPath.item];
+    // indexPath has two propertys item and section
+    // the section will be 0 because we only have one section, while the item will be which card we're talking about
+    
+    [self updateCell:cell usingCard:card];  // implemented just below
+    
+    return cell;
+}
+
+// supports method above
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
+{
+    // abstract
+    // can't be implemented in this base class because nothing is known about playing cards and set cards here
+    // don't forget to make it public, so subclasses can make it not abstract 
+}
+
+//-----------------------------------------------------------------
+// Original Implementation
+//-----------------------------------------------------------------
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-        // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-        //self.allSettings = [Setting allSettings];
-    
     [self updateUI];
 }
-
-/*
- - (void)viewWillAppear:(BOOL)animated
- {
- [super viewWillAppear:animated];
- self.allGameResults = [GameResult allGameResults];
- [self updateUI];
- }
- */
 
 // Lazy instantiation for the model
 - (CardMatchingGame *)game
 {
     if (!_game)
     {
-        _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
-                                                  usingDeck:[[PlayingCardDeck alloc] init]];
+        // will now be a generic base class
+        // playing card and set will become sub classes
+        _game = [[CardMatchingGame alloc] initWithCardCount:self.startingCardCount
+                                                  usingDeck:[self createDeck]];
         [self gameModeChange:self.gameModeSelector];
     }
     
     return _game;
 }
+
+- (Deck*)createDeck { return nil; } //abstract
 
 - (NSMutableArray *)history
 {
@@ -91,12 +132,15 @@
     return _gameResult;
 }
 
+// UPGRADE
+/*
 - (void)setCardButtons:(NSArray *)cardButtons
 {
     _cardButtons = cardButtons;
     
     [self updateUI];    
 }
+ */
 
 - (void)setGameModeSelector:(UISegmentedControl *)gameModeSelector
 {
@@ -105,90 +149,24 @@
     [self updateUI];
 }
 
-// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-/*
-- (void)setCardBack:(UIImage *)cardBack
-{
-    _cardBack = cardBack;
-    
-    [self updateUI];
-}
- */
-
+#define RESULTS_LABEL_FONT_SIZE 12.0
 
 // The method to update the UI
 // Objective 1: Make the UI look like the model
 // Objective 2: Inform the model of changes to the UI
 - (void)updateUI
 {
+    NSLog(@"2) CGVC.m in updateUI");
     
-    
-    // Create a variable for card backs
-    //UIImage *cardBackImage = [UIImage imageNamed: self.cardBack];
-    // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-    // UIImage *cardBackImage = self.cardBack;
-    
-    
-    
-    // Go through all your buttons and update all your cards
-    for (UIButton *cardButton in self.cardButtons)
+    // go through all the visible cells and  update them all
+    for (UICollectionViewCell *cell in [self.cardCollectionView visibleCells])
     {
-        // Get a card from
-        Card *card = [self.game cardAtIndex:[self.cardButtons indexOfObject:cardButton]];
+        // get the indexPath for each one to find it in the model
+        NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
         
-        // Setting all of the card's features
+        Card *card = [self.game cardAtIndex:indexPath.item];
         
-        // Set card value
-        [cardButton setTitle:card.contents forState:UIControlStateSelected]; //Nailed on first try
-        // Not so fast
-        // Documentation says I need to set title for every state or it reverts to the default
-        // in this case the back of the card
-        // So, I've got to add...
-        [cardButton setTitle:card.contents forState:UIControlStateSelected | UIControlStateDisabled];
-        
-        // Make sure correct state is selected
-        cardButton.selected = card.isFaceUp;
-        
-        // Make sure the enbled state is correct
-        cardButton.enabled = !card.isUnplayable;
-        
-        // Ghost cards if matched to 30%
-        cardButton.alpha = (card.isUnplayable ? 0.3 : 1.0);
-        
-        // Display the card back if the card is face down
-        if (!card.isFaceUp)
-        {
-            NSLog(@"cardView cardback %@", [self.settingsDicReceiver objectForKey: @"cardback"]);
-            
-            if ([self.settingsDicReceiver objectForKey: @"cardback"])
-            {
-                // UIImage *chosenCardback = [self.settingsDicReceiver objectForKey: @"cardback"];                
-                // [cardButton setImage: chosenCardback forState:UIControlStateNormal];
-                
-                [cardButton setImage: [self.settingsDicReceiver objectForKey: @"cardback"] forState:UIControlStateNormal];
-            }
-            
-            else
-            {
-                [cardButton setImage: [UIImage imageNamed: @"cardBackDefault.png"] forState:UIControlStateNormal];
-            }
-            
-            
-            
-            // -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-            //self.allSettings = [GameSettings allSettings];
-            // self.currentSettings = [GameSettings allSettings]; //settingsDic
-            // self.currentSettings = [GameSettings.settingsDic]; //settingsDic
-            
-            
-            // [cardButton setImage: [UIImage imageNamed: @"cardBackStripes.png"] forState:UIControlStateNormal];
-            // [cardButton setImage: card.cardBack forState:UIControlStateNormal];
-        }
-        
-        else
-        {
-            [cardButton setImage:nil forState:UIControlStateNormal];
-        }
+        [self updateCell:cell usingCard:card];
     }
     
     // Make sure the enbled state is correct
@@ -198,8 +176,32 @@
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
     
     // Update results on UI  
+    if ([self.game.results isKindOfClass: [NSAttributedString class]])
+    {
+        // Update results
+        if (self.game.results) self.resultsLabel.attributedText = self.game.results;
+        
+        // Center and Set Font Size
+        NSRange range = [[self.resultsLabel.attributedText string] rangeOfString:[self.resultsLabel.attributedText string]];
+        
+        NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragrahStyle setAlignment: NSTextAlignmentCenter];
+        
+        NSMutableAttributedString *resultsLabelAttrText = [self.resultsLabel.attributedText mutableCopy];
+        [resultsLabelAttrText addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:RESULTS_LABEL_FONT_SIZE] range:range];
+        [resultsLabelAttrText addAttribute:NSParagraphStyleAttributeName value:paragrahStyle range:range];
+            
+        self.resultsLabel.attributedText = resultsLabelAttrText;
+    }
+    
+    else
+    {
+        self.resultsLabel.text = self.game.results;
+    }
+    
     self.resultsLabel.alpha = 1;
-    self.resultsLabel.text = self.game.results;
+    
+    // Update slider on UI
     [self updateSliderRange];
     
 }
@@ -220,25 +222,58 @@
     [self.historySlider setValue:maxValue animated:YES];
 }
 
-- (IBAction)flipCard:(UIButton *)sender
+// UPGRADE
+// - (IBAction)flipCard:(UIButton *)sender
+
+- (IBAction)flipCard:(UITapGestureRecognizer *)gesture
 {
-    [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
-    self.flipCount++;
+    // get the location of the tap
+    CGPoint tapLocation = [gesture locationInView:self.cardCollectionView];
     
-    // if (![[self.history lastObject] isEqualToString:self.game.results]) [self.history addObject:self.game.results];
-    if(![self.game.results isEqualToString:@"Results"] && ![[self.history lastObject] isEqualToString:self.game.results]) // *!* condition to keep word "Results" out of history
+    // get the indexPath of the cell that was clicked on
+    NSIndexPath *indexPath = [self.cardCollectionView indexPathForItemAtPoint:tapLocation];
+    
+    // check to confirm tap is on a cell
+    if (indexPath)
     {
-        [self.history addObject:self.game.results];        
-    }
+        // all the former flipCard code
+        
+        // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];        
+        [self.game flipCardAtIndex:indexPath.item];
+        self.flipCount++;
+        NSLog(@"1) CGVC.m card succesfully flipped");
+        
+        
+        
+        // TROUBLE for SetCard
+        
+        // introspect to only work on playingcards
+        // if statement is causing trouble
+        
+        /*
+        if(![self.game.results isEqualToString:@"Results"] && ![[self.history lastObject] isEqualToString:self.game.results]) // *!* condition to keep word "Results" out of history
+        {
+            [self.history addObject:self.game.results];
+        }
+         */
+       
+        
+        
+        
+        
+        // Each time a card is flipped th e UI needs to be updated
+        [self updateUI];
+        
+        
+        self.gameResult.score = self.game.score;
+        
+        self.gameResult.gameType = self.game.gameType;
+        
+    }    
     
-    // Each time a card is flipped the UI needs to be updated
-    [self updateUI];
-    
-    
-    self.gameResult.score = self.game.score;
-    
-    self.gameResult.gameType = self.game.gameType;
 }
+
+
 
 - (IBAction)historySliderChanged:(UISlider *)sender
 {
@@ -256,12 +291,6 @@
 
 - (IBAction)dealCards:(UIButton *)sender
 {
-    // - (void)flipCardAtIndex:(NSUInteger)index
-    // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
-    // - (id)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
-    // deal new cards
-    //CardMatchingGame *game = [self.game initWithCardCount:[self.cardButtons count] usingDeck:[[PlayingCardDeck alloc] init]];
-    // or
     self.game = nil;
     self.flipCount = 0; // reset flipCount
     self.history = nil;

@@ -10,7 +10,6 @@
 
 @interface GameSettingsViewController : UIViewController
 
-// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 @property (strong, nonatomic) UIImage *cardBack;
 
 @end

@@ -47,7 +47,7 @@
         _start = [NSDate date]; // date is a method that returns the date/time at the momentit's called        
         _end = _start;
         
-        _gameType = @"XXX Matching";                                                                                      // *!*
+        _gameType = @"XXX Matching";
     }
     
     return self;
@@ -59,7 +59,7 @@
 #define START_KEY @"StartDate"
 #define END_KEY @"EndDate"
 #define SCORE_KEY @"Score"                                                    
-#define GAME_TYPE_KEY @"GameType"                                                                                          // *!*
+#define GAME_TYPE_KEY @"GameType"
 
 + (NSArray *)allGameResults
 {
@@ -95,7 +95,7 @@
             _score = [resultDictionary[SCORE_KEY] intValue]; // this must be turned back into an int because it's been stored as an NSNumber
             
             NSLog(@"GameResults.m, data from initFromPropertyList: %@", resultDictionary[GAME_TYPE_KEY]);
-            _gameType = resultDictionary[GAME_TYPE_KEY];                                                                   // *!*
+            _gameType = resultDictionary[GAME_TYPE_KEY];
             
             // a little saftey check
             if (!_start || !_end) self = nil;
@@ -154,7 +154,7 @@
 {
      // return a dictionary
     //return @{START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score)};
-    return @{START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score), GAME_TYPE_KEY : self.gameType};       // *!*
+    return @{START_KEY : self.start, END_KEY : self.end, SCORE_KEY : @(self.score), GAME_TYPE_KEY : self.gameType};
 }
 
 int i = 1;
@@ -186,7 +186,6 @@ int i = 1;
     return ([@(self.duration) compare:@(aGameResult.duration)]);
 }
 
-//------------------------------------------------------------------------------
 - (NSComparisonResult)compareGameType:(GameResult *)aGameResult
 {
     //NSLog(@"Compared for Duration");

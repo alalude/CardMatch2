@@ -242,6 +242,14 @@
     NSLog(@"flips updated to %d", self.flipCount);
 }
 
+
+
+
+//-----------------------------------------------------------------
+// Update Process
+//-----------------------------------------------------------------
+
+/*
 - (IBAction)flipCard:(UIButton *)sender
 {
     [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
@@ -249,7 +257,7 @@
     
     // self.resultsLabel.attributedText = self.game.results;
     
-    /*
+    /--
      
      // if (![[self.history lastObject] isEqualToString:self.game.results]) [self.history addObject:self.game.results];
      if(![self.game.results isEqualToString:@"Results"] && ![[self.history lastObject] isEqualToString:self.game.results]) // *!* condition to keep word "Results" out of history
@@ -257,7 +265,7 @@
      [self.history addObject:self.game.results];
      }
      
-     */
+     --/
     
     // Each time a card is flipped the UI needs to be updated
     [self updateUI];
@@ -265,6 +273,10 @@
     self.gameResult.gameType = self.game.gameType;                                                                          // *!*
     
 }
+*/
+
+
+
 
 - (IBAction)dealCards:(UIButton *)sender
 {
