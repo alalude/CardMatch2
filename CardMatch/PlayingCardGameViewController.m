@@ -32,14 +32,17 @@
     return STARTING_CARD_COUNT;
 }
 
-- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card // animate:(BOOL)animate
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card decideToAnimate:(BOOL)animate
 {
+    NSLog(@"animate: %d", animate);
+    
     // confirm cell is of type UICollectionViewCell
     if ([cell isKindOfClass:[PlayingCardCollectionViewCell class]])
     {
         // accessing outlet of little box to get the playing card view
         PlayingCardView *playingCardView = ((PlayingCardCollectionViewCell *)cell).playingCardView;
         
+        /*
         if ([card isKindOfClass:[PlayingCard class]])
         {
             // -*- former updateUI code -*- //
@@ -54,6 +57,40 @@
             playingCardView.alpha = playingCard.isUnplayable ? UNPLAYABLE_CARD_ALPHA : PLAYABLE_CARD_ALPHA;
             
         }
+        */
+        
+         
+        if ([card isKindOfClass:[PlayingCard class]])
+        {
+            // -*- former updateUI code -*- //
+            
+            PlayingCard *playingCard = (PlayingCard *)card;
+            
+            playingCardView.rank = playingCard.rank;
+            playingCardView.suit = playingCard.suit;
+            
+            if (animate)
+            {
+                [UIView transitionWithView : playingCardView
+                              duration : 0.5
+                               options : UIViewAnimationOptionTransitionFlipFromLeft
+                            animations : ^{
+                                // if (!self.setCardView.faceUp) [self drawRandomSetCard];
+                                // self.setCardView.faceUp = !self.setCardView.faceUp;
+                                playingCardView.faceUp = playingCard.isFaceUp;
+                            }
+                            completion : NULL];
+            }
+            
+            else
+            {
+                playingCardView.faceUp = playingCard.isFaceUp;
+            }
+            
+            playingCardView.alpha = playingCard.isUnplayable ? UNPLAYABLE_CARD_ALPHA : PLAYABLE_CARD_ALPHA;
+            
+        }
+        
     }
 }
 

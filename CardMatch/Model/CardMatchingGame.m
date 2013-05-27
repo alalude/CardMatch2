@@ -84,13 +84,13 @@
         {
             self.results = [[NSMutableAttributedString alloc] initWithString:@"Results"];
             self.gameType = @"Set Matching";                                                                    // *!*
-            NSLog(@"1) CMG.m gameType %@", self.gameType);
+            // NSLog(@"1) CMG.m gameType %@", self.gameType);
         }
         else
         {
             self.results = (@"Results");    
             self.gameType = @"Card Matching";                                                                   // *!*
-            NSLog(@"CMG.m gameType %@", self.gameType);
+            // NSLog(@"CMG.m gameType %@", self.gameType);
         }
         
         
@@ -98,7 +98,7 @@
         // To prevent comparing a card to itself
         if (!card.isFaceUp)
         {
-            NSLog(@"2) CMG.m card is not face up");
+            // NSLog(@"2) CMG.m card is not face up");
             
             NSMutableArray *otherCards = [[NSMutableArray alloc] init];
             NSMutableArray *otherContents = [[NSMutableArray alloc] init];
@@ -117,7 +117,7 @@
             
             if ([card.contents isKindOfClass: [NSAttributedString class]])
             {
-                NSLog(@"3) CMG.m card.contents isKindOfClass NSAttributedString");
+                // NSLog(@"3) CMG.m card.contents isKindOfClass NSAttributedString");
                 
                 // NSDictionary  *otherCardsDic = [[NSDictionary alloc] init];
                 NSMutableDictionary  *otherCardsDic = [[NSMutableDictionary alloc] init];
@@ -154,7 +154,7 @@
                 {
                     // self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents];           // *!*
                     
-                    NSLog(@"4) CMG.m only one card flipped");
+                    // NSLog(@"4) CMG.m only one card flipped");
                     [self.results replaceCharactersInRange:textRange withString:@"Flipped up "];
                     [self.results appendAttributedString: mainCard];                    
                 }

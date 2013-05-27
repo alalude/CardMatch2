@@ -19,6 +19,6 @@
 
 - (Deck*)createDeck; //abstract
 @property (nonatomic) NSUInteger startingCardCount; //abstract
-- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card; // abstract
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card decideToAnimate:(BOOL)animate; // abstract
 
 @end

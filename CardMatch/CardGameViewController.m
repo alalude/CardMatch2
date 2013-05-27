@@ -18,6 +18,7 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (nonatomic) int flipCount;
+@property (nonatomic) BOOL animate;
 
 // UPGRADE
 // An array of the cards on screen
@@ -66,7 +67,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    // make sure "PlayingCard" matches up with what s in the storyboard (reuse identifier)
+    // make sure "PlayingCard" matches up with what's in the storyboard (reuse identifier)
     // were talking about the cell not the view within it
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PlayingOrSetCard" forIndexPath:indexPath]; // PlayingOrSetCard has been set as the Reuse Identifier for both PlayingCardCollectionViewCell and PlayingCardCollectionViewCell
     
@@ -76,13 +77,21 @@
     // indexPath has two propertys item and section
     // the section will be 0 because we only have one section, while the item will be which card we're talking about
     
-    [self updateCell:cell usingCard:card];  // implemented just below
+    
+    
+    //[self updateCell:cell usingCard:card];  // implemented just below
+    
+    // -----------------------------------------------------------------
+    [self updateCell:cell usingCard:card decideToAnimate:self.animate];
+    // -----------------------------------------------------------------
+    
+    
     
     return cell;
 }
 
 // supports method above
-- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card decideToAnimate:(BOOL)animate
 {
     // abstract
     // can't be implemented in this base class because nothing is known about playing cards and set cards here
@@ -166,7 +175,16 @@
         
         Card *card = [self.game cardAtIndex:indexPath.item];
         
-        [self updateCell:cell usingCard:card];
+        
+        
+        // [self updateCell:cell usingCard:card];
+        
+        // -----------------------------------------------------------------
+        [self updateCell:cell usingCard:card decideToAnimate:self.animate];
+        // -----------------------------------------------------------------
+        
+        
+        
     }
     
     // Make sure the enbled state is correct
@@ -261,7 +279,7 @@
         
         
         
-        // Each time a card is flipped th e UI needs to be updated
+        // Each time a card is flipped the UI needs to be updated
         [self updateUI];
         
         

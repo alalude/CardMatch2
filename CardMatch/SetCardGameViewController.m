@@ -33,7 +33,7 @@
     return STARTING_CARD_COUNT;
 }
 
-- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card
+- (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card decideToAnimate:(BOOL)animate
 {
     //NSLog(@"1) SCGVC.m updateCell leads here");
     
