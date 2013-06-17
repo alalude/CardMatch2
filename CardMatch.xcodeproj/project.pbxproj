@@ -199,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				E36F357816E0244100FB92F9 /* MainStoryboard.storyboard */,
+				E39819381757E9E7006354B8 /* PlayingModel */,
 				E3E7E3F31703CA6500B5BB31 /* SetModel */,
 				E36F358916E0804B00FB92F9 /* Model */,
 				E3A0C3C91721DE740093AD08 /* PlayingCardView.h */,
@@ -260,14 +261,21 @@
 				E36F358416E07F9A00FB92F9 /* Card.m */,
 				E36F358616E0801500FB92F9 /* Deck.h */,
 				E36F358716E0801500FB92F9 /* Deck.m */,
-				E36F358A16E1831200FB92F9 /* PlayingCard.h */,
-				E36F358B16E1831200FB92F9 /* PlayingCard.m */,
-				E36F358D16E184AE00FB92F9 /* PlayingCardDeck.h */,
-				E36F358E16E184AE00FB92F9 /* PlayingCardDeck.m */,
 				E38F3C1816F6E20B00C6B0E7 /* CardMatchingGame.h */,
 				E38F3C1916F6E20B00C6B0E7 /* CardMatchingGame.m */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		E39819381757E9E7006354B8 /* PlayingModel */ = {
+			isa = PBXGroup;
+			children = (
+				E36F358A16E1831200FB92F9 /* PlayingCard.h */,
+				E36F358B16E1831200FB92F9 /* PlayingCard.m */,
+				E36F358D16E184AE00FB92F9 /* PlayingCardDeck.h */,
+				E36F358E16E184AE00FB92F9 /* PlayingCardDeck.m */,
+			);
+			name = PlayingModel;
 			sourceTree = "<group>";
 		};
 		E3A0C3B01721DE740093AD08 /* PlayingCardFaces */ = {

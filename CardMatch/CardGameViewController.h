@@ -21,4 +21,10 @@
 @property (nonatomic) NSUInteger startingCardCount; //abstract
 - (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card decideToAnimate:(BOOL)animate; // abstract
 
+
+//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+
+// - (void)removeCell:(UICollectionViewCell *)cell; // fromCollectionView:(UICollectionView *)collectionView;
+
+
 @end

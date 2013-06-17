@@ -28,6 +28,12 @@
 // Get a card to update UI
 - (Card *)cardAtIndex:(NSUInteger)index;
 
+// *!* Count cards to update UI *!*
+// - (NSUInteger)cardCount; // replaced by property "numberOfCards"
+
+// *!* Delete a card to update UI *!*
+- (void)removeCardAtIndex:(NSUInteger)index;
+
 // readonly = only has a getter
 @property (readonly, nonatomic) int score;
 @property (strong, nonatomic) NSString *gameType;
@@ -40,5 +46,6 @@
 @property (nonatomic) int numberOfMatchingCards;
 
 @property (nonatomic, getter = isActiveModeControl) BOOL activeModeControl;
+@property (nonatomic) int numberOfCards;
 
 @end

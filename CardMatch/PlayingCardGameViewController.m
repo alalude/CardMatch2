@@ -34,7 +34,7 @@
 
 - (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card decideToAnimate:(BOOL)animate
 {
-    NSLog(@"animate: %d", animate);
+    //NSLog(@"animate: %d", animate);
     
     // confirm cell is of type UICollectionViewCell
     if ([cell isKindOfClass:[PlayingCardCollectionViewCell class]])
@@ -69,7 +69,8 @@
             playingCardView.rank = playingCard.rank;
             playingCardView.suit = playingCard.suit;
             
-            if (animate)
+            //if (animate || (playingCardView.faceUp > playingCard.isFaceUp)) // This, my original way also works
+            if (playingCardView.faceUp != playingCard.isFaceUp)
             {
                 [UIView transitionWithView : playingCardView
                               duration : 0.5

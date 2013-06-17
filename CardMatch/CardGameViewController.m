@@ -18,7 +18,11 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *flipsLabel;
 @property (nonatomic) int flipCount;
-@property (nonatomic) BOOL animate;
+@property (nonatomic) BOOL animate; // Not really being used
+@property (nonatomic) NSInteger itemToAnimate; // Not really being used
+@property (nonatomic) NSInteger cellCount;
+@property (nonatomic) BOOL removeUnplayableCards; // ADVICE: tells if an unplayable card should be removed
+
 
 // UPGRADE
 // An array of the cards on screen
@@ -60,16 +64,46 @@
     return 1; // returns 1 even if not implemented
 }
 
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.startingCardCount; // *!* gonna want to ask how many cards are currently in play *!*
+    
+    // game knows the number of cards
+    // game.cards is an array of cards
+    
+    //NSArray* sectionArray = [_data objectAtIndex:section];
+    //return [sectionArray count];
+    
+    // gotta count items in cardCollectionView
+    // cardCollectionView has one section with many items/cells/cards
+    // cell = item
+    //self.cardCollectionView
+    
+    
+    // -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-//
+    // BHAlbum *album = self.albums[section];    
+    // return album.photos.count;
+    
+    // return [self.game cardCount];
+    return self.game.numberOfCards;
+   
+    
+    // return self.startingCardCount; // *!* gonna want to ask how many cards are currently in play *!*
+       //return [self collectionView:self.cardCollectionView numberOfItemsInSection:0]; infinite loop
+    
 }
+
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    // make sure "PlayingCard" matches up with what's in the storyboard (reuse identifier)
-    // were talking about the cell not the view within it
+    //Everything works orginal
+     
+    //make sure "PlayingCard" matches up with what's in the storyboard (reuse identifier)
+    // we're talking about the cell not the view within it
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PlayingOrSetCard" forIndexPath:indexPath]; // PlayingOrSetCard has been set as the Reuse Identifier for both PlayingCardCollectionViewCell and PlayingCardCollectionViewCell
+    
+    NSLog(@"Cell #%d added", self.cellCount++);
+    NSLog(@"cardCollectionView cell #%d", [self collectionView:self.cardCollectionView numberOfItemsInSection:0]);
     
     // now that we have the cell let's load it up with that something from the model
     // let's get that something from the model... the card
@@ -77,18 +111,41 @@
     // indexPath has two propertys item and section
     // the section will be 0 because we only have one section, while the item will be which card we're talking about
     
-    
-    
     //[self updateCell:cell usingCard:card];  // implemented just below
-    
-    // -----------------------------------------------------------------
     [self updateCell:cell usingCard:card decideToAnimate:self.animate];
-    // -----------------------------------------------------------------
-    
-    
     
     return cell;
+    
+    
+    
+    /*
+    // -----
+    // let the below fail when the index is for a card that's unplayable
+    
+    // not quite there yet
+    
+    // -----
+    
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PlayingOrSetCard" forIndexPath:indexPath];
+    Card *card = [self.game cardAtIndex:indexPath.item];
+    
+    // Removing Matched Cards
+    if (card.isUnplayable)
+    {
+       [self.game removeCardAtIndex:indexPath.item];
+       [collectionView moveItemAtIndexPath:indexPath toIndexPath:nil];
+    }
+    
+    else
+    {
+        [self updateCell:cell usingCard:card decideToAnimate:self.animate];
+    }
+    
+    return cell;
+    */
+    
 }
+
 
 // supports method above
 - (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card decideToAnimate:(BOOL)animate
@@ -97,6 +154,52 @@
     // can't be implemented in this base class because nothing is known about playing cards and set cards here
     // don't forget to make it public, so subclasses can make it not abstract 
 }
+
+
+//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+
+/*
+- (void)deleteItemsFromDataSourceAtIndexPaths:(NSArray *)indexPathArray
+{
+    NSLog(@"4) CGVC.m in deleteItemsFromDataSourceAtIndexPaths");
+    [self.cardCollectionView deleteItemsAtIndexPaths:indexPathArray];
+    
+    // I should have done something that looks more like this line below
+    // [self.cardCollectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:i inSection:0]]];
+}
+
+- (void)removeCell:(UICollectionViewCell *)cell //fromCollectionView:(UICollectionView *)collectionView
+{
+    NSLog(@"3) CGVC.m in removeCell");
+    
+    //- (void)deleteItemsAtIndexPaths:(NSArray *)indexPaths
+    
+    NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
+    NSArray *indexPathArray = [NSArray arrayWithObjects: indexPath, nil];
+    
+    // Adjust number of cards in data source?
+    // self.startingCardCount--;
+    
+    // YES self is the datat source >> @interface CardGameViewController () <UICollectionViewDataSource>
+    // But "deleteItemsFromDataSourceAtIndexPaths" is a made up method
+    // Delete the items from the data source.
+    [self deleteItemsFromDataSourceAtIndexPaths:indexPathArray];
+    // [self.game removeCardAtIndex:indexPath.item];
+    
+    // Now delete the items from the collection view.
+    [self.cardCollectionView deleteItemsAtIndexPaths:indexPathArray];
+    
+    // - (void) reloadData;
+    // - (void) reloadItemsAtIndexPaths:(NSArray *)indexPaths;
+    
+    // [collectionView insertItemsAtIndexPaths:indexPathArray];
+    
+}
+ 
+*/
+
+//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+
 
 //-----------------------------------------------------------------
 // Original Implementation
@@ -167,9 +270,16 @@
 {
     NSLog(@"2) CGVC.m in updateUI");
     
+    
     // go through all the visible cells and  update them all
     for (UICollectionViewCell *cell in [self.cardCollectionView visibleCells])
     {
+        
+        
+        //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+        // Perhaps this is where cards are to be removed
+        //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+        
         // get the indexPath for each one to find it in the model
         NSIndexPath *indexPath = [self.cardCollectionView indexPathForCell:cell];
         
@@ -179,12 +289,63 @@
         
         // [self updateCell:cell usingCard:card];
         
-        // -----------------------------------------------------------------
+        // USE ME
         [self updateCell:cell usingCard:card decideToAnimate:self.animate];
-        // -----------------------------------------------------------------
+
+        
+        
+        //- (void)removeCell:(UICollectionViewCell *)cell fromCollectionView:(UICollectionView *)collectionView;
+        /* // Removing Matched Cards
+        if (card.isUnplayable)
+        {
+            
+            [self removeCell:cell]; // fromCollectionView:self.cardCollectionView
+            [self.game removeCardAtIndex:indexPath.item];
+            
+            [self.game removeCardAtIndex:i];
+            [self.cardCollectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:i inSection:0]]];
+        }
+        
+        else
+        {
+            [self updateCell:cell usingCard:card decideToAnimate:self.animate];
+        }
         
         
         
+        //--- The Old Way ---//
+         if (card.isUnplayable)
+         {
+             //[self.cardCollectionView visibleCells]; // DELETE ITEM
+             
+             [self.game removeCardAtIndex:indexPath.item]; // DELETE ITEM
+             
+             
+             // reduce number of cards on screen
+             
+             
+             //[self updateCell:cell usingCard:card decideToAnimate:self.animate];
+         }
+         
+         else
+         {
+             [self updateCell:cell usingCard:card decideToAnimate:self.animate];
+         }
+         */
+        
+        
+        // if statement to control which card is flipped
+        /* Use if using animate variable
+         if (self.itemToAnimate == indexPath.item)
+         {
+         [self updateCell:cell usingCard:card decideToAnimate:!self.animate]; // yes animate
+         }
+         
+         else
+         {
+         [self updateCell:cell usingCard:card decideToAnimate:self.animate];
+         }
+         */
     }
     
     // Make sure the enbled state is correct
@@ -256,11 +417,11 @@
     {
         // all the former flipCard code
         
-        // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];        
+        // [self.game flipCardAtIndex:[self.cardButtons indexOfObject:sender]];
         [self.game flipCardAtIndex:indexPath.item];
         self.flipCount++;
+        // self.itemToAnimate = indexPath.item; // animate when flipped // Not necessary now
         NSLog(@"1) CGVC.m card succesfully flipped");
-        
         
         
         // TROUBLE for SetCard
@@ -278,7 +439,6 @@
         
         
         
-        
         // Each time a card is flipped the UI needs to be updated
         [self updateUI];
         
@@ -287,7 +447,23 @@
         
         self.gameResult.gameType = self.game.gameType;
         
-    }    
+        
+    }
+    
+    // CARD REMOVAL
+    if (self.removeUnplayableCards)
+    {
+        for (int i = 0; i < self.game.numberOfCards; i++)
+        {
+            Card *card = [self.game cardAtIndex:i];
+            
+            if (card.isUnplayable)
+            {
+                [self.game removeCardAtIndex:i];
+                [self.cardCollectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:i inSection:0]]];
+            }
+        }
+    }
     
 }
 

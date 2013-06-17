@@ -17,7 +17,7 @@
 
 @implementation SetCardGameViewController
 
-#define STARTING_CARD_COUNT 12
+#define STARTING_CARD_COUNT 16
 #define PLAYABLE_CARD_ALPHA 1.0
 #define UNPLAYABLE_CARD_ALPHA 0.3
 
@@ -32,6 +32,13 @@
 {
     return STARTING_CARD_COUNT;
 }
+
+// for removal of cards in set game only
+- (BOOL)removeUnplayableCards
+{
+    return YES;
+}
+
 
 - (void)updateCell:(UICollectionViewCell *)cell usingCard:(Card *)card decideToAnimate:(BOOL)animate
 {
@@ -56,6 +63,41 @@
             setCardView.shade = [[setCard.rawContents objectForKey: @"shade"] floatValue];
             setCardView.faceUp = setCard.isFaceUp;
             setCardView.alpha = setCard.isUnplayable ? UNPLAYABLE_CARD_ALPHA : PLAYABLE_CARD_ALPHA;
+            
+            
+            //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+            /// Perhaps this is where cards are to be removed
+            ////\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//
+            
+            
+            // UIViewAnimationOptionTransitionFlipFromLeft
+            // TransitionCurlUp
+            // TransitionCrossDissolve
+            
+            /*
+            if (setCard.isUnplayable)
+            {
+                // remove it from the array and view
+                // Card *card = [self.game cardAtIndex:indexPath.item];
+                // [self.game removeCardAtIndex:indexPath.item];
+                
+                [UIView transitionWithView : setCardView
+                                  duration : 0.5
+                                   options : UIViewAnimationOptionTransitionFlipFromLeft
+                                animations : ^{
+                                    // if (!self.setCardView.faceUp) [self drawRandomSetCard];
+                                    // self.setCardView.faceUp = !self.setCardView.faceUp;
+                                    setCardView.faceUp = setCard.isFaceUp;
+                                }
+                                completion : NULL];
+            }
+            
+            else
+            {
+                setCardView.alpha = PLAYABLE_CARD_ALPHA;
+            }
+             */
+            
             
             // -- Testing Suite -- //
             // NSLog(@" - SCGVC.m suit %@", setCardView.suit);

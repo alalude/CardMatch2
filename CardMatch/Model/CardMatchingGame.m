@@ -86,6 +86,7 @@
             self.gameType = @"Set Matching";                                                                    // *!*
             // NSLog(@"1) CMG.m gameType %@", self.gameType);
         }
+       
         else
         {
             self.results = (@"Results");    
@@ -93,8 +94,7 @@
             // NSLog(@"CMG.m gameType %@", self.gameType);
         }
         
-        
-        
+       
         // To prevent comparing a card to itself
         if (!card.isFaceUp)
         {
@@ -114,6 +114,10 @@
                 }
             }
             
+            
+            //-----------------------------------------------------------------
+            // Flip Set Cards
+            //-----------------------------------------------------------------
             
             if ([card.contents isKindOfClass: [NSAttributedString class]])
             {
@@ -152,7 +156,7 @@
                 // If only one card is flipped
                 if ([otherCards count] < 2)                                     // self.numberOfMatchingCards
                 {
-                    // self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents];           // *!*
+                    // self.results = [NSString stringWithFormat:@"Flipped up %@", card.contents];
                     
                     // NSLog(@"4) CMG.m only one card flipped");
                     [self.results replaceCharactersInRange:textRange withString:@"Flipped up "];
@@ -162,16 +166,16 @@
                 
                 else
                 {
-                    int matchScore = [card match:otherCards];                                               // card.contents
+                    int matchScore = [card match:otherCards];
                     
                     if (matchScore)
                     {
                         
-                        card.unplayable = YES;
+                        card.unplayable = YES;                    // *!* matched card            *!*            *!*
                         
                         for (Card *otherCard in otherCards)
                         {
-                            otherCard.unplayable = YES;
+                            otherCard.unplayable = YES;           // *!* matched card            *!*            *!*
                         }
                         
                         NSString *reward = [NSString stringWithFormat: @"%d", (matchScore * MATCH_BONUS * MATCH_BONUS)];
@@ -247,7 +251,9 @@
             }
             
             
-            
+            //-----------------------------------------------------------------
+            // Flip Playing Cards
+            //-----------------------------------------------------------------
             
             else
             {
@@ -280,12 +286,19 @@
                     {
                         for (Card *otherCard in otherCards)
                         {
+                            
+                            
                             otherCard.faceUp = NO;
+                            
+                            
                         }
                         
                         self.score -= MISMATCH_PENALTY;                                                    
                         self.results =
                         [NSString stringWithFormat:@"%@ & %@ don’t match! %d point penalty!", card.contents, [otherContents componentsJoinedByString:@" & "], MISMATCH_PENALTY];
+                        
+                        
+                        
                     }
                 }
              }
@@ -304,6 +317,26 @@
     
 }
 
+- (int)numberOfCards
+{
+    return [self.cards count];
+    
+}
+
+
+//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+// Delete card at index?
+//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+
+
+- (void)removeCardAtIndex:(NSUInteger)index
+{
+    //self.cards[index] = nil;
+    
+    //[self.cards removeObject: self.cards[index]]; // swaped for line below
+    [self.cards removeObjectAtIndex:index];
+}
+
 - (id)initWithCardCount:(NSUInteger)count
               usingDeck:(Deck *)deck
 {
@@ -316,7 +349,7 @@
             Card *card = [deck drawRandomCard];
             if (card) //checking that we haven't run out of cards
             {
-                self.cards[i] = card; // requires lazy instantiation, cards could be contain nil causing this line to do nothing
+                self.cards[i] = card; // requires lazy instantiation, cards could be/contain nil causing this line to do nothing
             }
             else
             {
